@@ -6,8 +6,7 @@ public sealed record CategorizationRuleMatch
         string ruleId,
         MatchType matchType,
         ExpenseCategory? resultingCategory,
-        int priority,
-        string? pattern = null)
+        int priority)
     {
         if (string.IsNullOrWhiteSpace(ruleId))
         {
@@ -18,7 +17,6 @@ public sealed record CategorizationRuleMatch
         MatchType = matchType;
         ResultingCategory = resultingCategory;
         Priority = priority;
-        Pattern = pattern;
     }
 
     public string RuleId { get; }
@@ -28,6 +26,4 @@ public sealed record CategorizationRuleMatch
     public ExpenseCategory? ResultingCategory { get; }
 
     public int Priority { get; }
-
-    public string? Pattern { get; }
 }

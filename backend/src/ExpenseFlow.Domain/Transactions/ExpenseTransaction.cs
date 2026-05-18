@@ -15,44 +15,8 @@ public sealed record ExpenseTransaction
         bool isPotentialDuplicate = false,
         string? installment = null,
         IReadOnlyCollection<ValidationIssue>? validationIssues = null)
-        : this(
-            sourceRow,
-            date: null,
-            description: null,
-            amount: null,
-            status,
-            category,
-            reviewReason,
-            includedInProcessedTotal,
-            includedInCategoryTotals,
-            isPotentialDuplicate,
-            installment,
-            validationIssues,
-            ruleMatches: null,
-            conflictingRuleMatches: null)
-    {
-    }
-
-    public ExpenseTransaction(
-        TransactionSourceRow sourceRow,
-        DateOnly? date,
-        string? description,
-        decimal? amount,
-        RowStatus status,
-        ExpenseCategory? category,
-        ReviewReason? reviewReason,
-        bool includedInProcessedTotal,
-        bool includedInCategoryTotals,
-        bool isPotentialDuplicate = false,
-        string? installment = null,
-        IReadOnlyCollection<ValidationIssue>? validationIssues = null,
-        IReadOnlyCollection<CategorizationRuleMatch>? ruleMatches = null,
-        IReadOnlyCollection<CategorizationRuleMatch>? conflictingRuleMatches = null)
     {
         SourceRow = sourceRow ?? throw new ArgumentNullException(nameof(sourceRow));
-        Date = date;
-        Description = description;
-        Amount = amount;
         Status = status;
         Category = category;
         ReviewReason = reviewReason;
@@ -61,19 +25,11 @@ public sealed record ExpenseTransaction
         IsPotentialDuplicate = isPotentialDuplicate;
         Installment = installment ?? sourceRow.RawInstallment;
         ValidationIssues = validationIssues ?? Array.Empty<ValidationIssue>();
-        RuleMatches = ruleMatches ?? Array.Empty<CategorizationRuleMatch>();
-        ConflictingRuleMatches = conflictingRuleMatches ?? Array.Empty<CategorizationRuleMatch>();
 
         ValidateState();
     }
 
     public TransactionSourceRow SourceRow { get; }
-
-    public DateOnly? Date { get; }
-
-    public string? Description { get; }
-
-    public decimal? Amount { get; }
 
     public RowStatus Status { get; }
 
@@ -91,19 +47,12 @@ public sealed record ExpenseTransaction
 
     public IReadOnlyCollection<ValidationIssue> ValidationIssues { get; }
 
-    public IReadOnlyCollection<CategorizationRuleMatch> RuleMatches { get; }
-
-    public IReadOnlyCollection<CategorizationRuleMatch> ConflictingRuleMatches { get; }
-
     public bool RequiresReview =>
         Status is RowStatus.ReviewRequired or RowStatus.Invalid or RowStatus.ExcludedFromTotals || IsPotentialDuplicate;
 
     public ExpenseTransaction MarkPotentialDuplicate() =>
         new(
             SourceRow,
-            Date,
-            Description,
-            Amount,
             Status,
             Category,
             ReviewReason ?? Transactions.ReviewReason.PotentialDuplicate,
@@ -111,9 +60,7 @@ public sealed record ExpenseTransaction
             IncludedInCategoryTotals,
             isPotentialDuplicate: true,
             Installment,
-            ValidationIssues,
-            RuleMatches,
-            ConflictingRuleMatches);
+            ValidationIssues);
 
     private void ValidateState()
     {
