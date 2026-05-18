@@ -108,3 +108,10 @@
 - Alternatives considered: Hand-roll CSV parsing in application/domain code, expose CsvHelper types through the application boundary, or combine parsing with categorization and reporting in one workflow step.
 - Consequences: CSV-specific behavior stays replaceable and testable behind an application abstraction. Domain code remains infrastructure-independent. Later milestones can build deterministic categorization, totals, and report generation on top of parsed rows without changing parser responsibilities.
 - Status: Accepted.
+
+### 2026-05-18 - Implement seed deterministic categorization in Application
+- Decision: Milestone 5 uses an application-facing `ICategorizationRuleEngine` with an in-code seed deterministic implementation for categorization and review rules R001 through R017 from the demo dataset, while R018 remains covered by parser row validation. The engine takes valid parsed transaction candidates, returns row-level transaction outcomes, records matched rule IDs and patterns, flags category conflicts and potential duplicates, and marks refund-like and transfer/payment-like rows as excluded from totals later. It does not calculate totals, generate reports, call AI, or use persistence.
+- Context: The MVP needs deterministic categorization and review detection before totals and report generation can be implemented. The seed rules are part of the first vertical slice and should remain testable without HTTP, database, or infrastructure dependencies.
+- Alternatives considered: Put seed rules in Infrastructure, make rules database-backed immediately, combine categorization with report generation, or defer rule IDs and audit evidence until the reporting milestone.
+- Consequences: Categorization behavior is simple, deterministic, and covered by unit and fixture-backed tests. Rule storage can evolve later, while Milestone 6 can consume explicit transaction outcomes without changing parser behavior or adding AI.
+- Status: Accepted.
