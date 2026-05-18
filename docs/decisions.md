@@ -73,3 +73,10 @@
 - Alternatives considered: Begin backend architecture without acceptance tests, write implementation tests before product-level acceptance tests, or keep acceptance criteria only as broad prose in the MVP scope.
 - Consequences: Future architecture can start with a clearer release gate and less guessing. The tests do not choose framework, database, endpoint, module structure, or application code. Any architecture proposal must preserve the documented deterministic behavior and auditability requirements.
 - Status: Accepted.
+
+### 2026-05-18 - Define first portfolio demo story and vertical slice
+- Decision: The first portfolio demo will process the 22-row synthetic mixed-behavior dataset with separately provided expected total `258248.00` and produce the MVP report showing row accounting, deterministic categorization, review items, invalid rows, excluded rows, totals, expected-total validation, and audit details.
+- Context: The project audit identified the need for a concise demo narrative and success path before implementation. The input/output contract, demo dataset design, and acceptance tests now provide enough source material to define a concrete first vertical slice without choosing backend architecture.
+- Alternatives considered: Lead with the happy path dataset only, build a broader product tour, start with a frontend/dashboard demo, or move directly into backend architecture without a demo story.
+- Consequences: The project has a clearer portfolio story and first implementation target. The demo remains backend-focused and intentionally excludes frontend, persistence, AI, PDF/Excel support, actual fixture files, application code, test code, and architecture decisions until explicitly requested.
+- Status: Accepted.
