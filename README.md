@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Milestone 5 is complete. CSV parsing, row validation, deterministic categorization, and review detection are implemented behind application abstractions, with source row numbers and raw row values preserved for auditability. The next step is Milestone 6: totals and report generation. Processed total calculation, category total calculation, expected total validation, API processing endpoints, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
+Milestone 6 is complete. CSV parsing, row validation, deterministic categorization, review detection, processed totals, trusted category totals, expected total validation, and MVP report generation are implemented behind application abstractions, with source row numbers and raw row values preserved for auditability. The next step is Milestone 7: the first processing API endpoint. API processing endpoints, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -111,7 +111,7 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Implement Milestone 6 from `docs/build-plan.md`: totals and report generation.
+1. Implement Milestone 7 from `docs/build-plan.md`: first processing API endpoint.
 2. Keep commits small and milestone-oriented.
 3. Use only the public synthetic fixtures in `backend/testdata/` for committed tests and demos.
 4. Preserve the milestone boundaries: parsing, categorization/review detection, totals, reporting, and API behavior stay separated.

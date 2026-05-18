@@ -176,18 +176,16 @@ public sealed class SeedDeterministicCategorizationRuleEngineTests
     }
 
     [Fact]
-    public void CategorizationDoesNotRequireAiOrCalculateTotalsOrGenerateReports()
+    public void CategorizationDoesNotRequireAiOrOwnReportGeneration()
     {
-        var applicationTypes = typeof(SeedDeterministicCategorizationRuleEngine)
-            .Assembly
-            .GetTypes()
-            .Where(type => type.Namespace?.StartsWith("ExpenseFlow.Application", StringComparison.Ordinal) == true);
+        var engineMembers = typeof(SeedDeterministicCategorizationRuleEngine)
+            .GetMembers()
+            .Select(member => member.Name);
 
-        Assert.DoesNotContain(applicationTypes, type => type.Name.Contains("Ai", StringComparison.OrdinalIgnoreCase));
-        Assert.DoesNotContain(applicationTypes, type => type.Name.Contains("OpenAi", StringComparison.OrdinalIgnoreCase));
-        Assert.DoesNotContain(applicationTypes, type => type.Name.Contains("TotalCalculator", StringComparison.OrdinalIgnoreCase));
-        Assert.DoesNotContain(applicationTypes, type => type.Name.Contains("ReportGenerator", StringComparison.OrdinalIgnoreCase));
-        Assert.DoesNotContain(applicationTypes, type => type.Name.Contains("ExpenseReportProcessor", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(engineMembers, member => member.Contains("Ai", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(engineMembers, member => member.Contains("OpenAi", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(engineMembers, member => member.Contains("Total", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(engineMembers, member => member.Contains("Report", StringComparison.OrdinalIgnoreCase));
     }
 
     private ExpenseTransaction Categorize(ParsedTransactionCandidate candidate) =>
