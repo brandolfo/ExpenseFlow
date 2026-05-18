@@ -38,3 +38,10 @@
 - Alternatives considered: Use AI for all categorization, use AI to reconcile totals, allow AI to create categories automatically, or omit AI design until implementation.
 - Consequences: Deterministic processing remains useful even when AI fails or is disabled. Future AI output must be structured, confidence-aware, auditable, privacy-conscious, and safe to reject. Known merchant rules take priority over AI suggestions.
 - Status: Accepted.
+
+### 2026-05-18 - Require MVP contracts and acceptance tests before architecture
+- Decision: Backend architecture work will wait until the MVP input/output contract, synthetic demo dataset, and acceptance tests are defined.
+- Context: The project audit found that the product direction is strong, but implementation readiness is limited by unresolved practical decisions: first input shape, report output shape, deterministic rule examples, demo data, and expected behavior for key edge cases.
+- Alternatives considered: Begin backend architecture immediately, continue adding broad product documentation, or start implementation with unresolved contracts.
+- Consequences: Architecture starts later, but with less guessing and lower rework risk. The next documentation work should narrow the MVP into concrete examples and testable behavior instead of expanding future scope.
+- Status: Accepted.
