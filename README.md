@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Milestone 6 is complete. CSV parsing, row validation, deterministic categorization, review detection, processed totals, trusted category totals, expected total validation, and MVP report generation are implemented behind application abstractions, with source row numbers and raw row values preserved for auditability. The next step is Milestone 7: the first processing API endpoint. API processing endpoints, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
+Milestone 7 is complete. CSV parsing, row validation, deterministic categorization, review detection, processed totals, trusted category totals, expected total validation, MVP report generation, and the first processing API endpoint are implemented. The endpoint accepts raw CSV text in JSON and preserves source row numbers and raw row values for auditability. The next step is Milestone 8: integration tests and release gate hardening. Database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -111,7 +111,7 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Implement Milestone 7 from `docs/build-plan.md`: first processing API endpoint.
+1. Implement Milestone 8 from `docs/build-plan.md`: integration tests and release gate hardening.
 2. Keep commits small and milestone-oriented.
 3. Use only the public synthetic fixtures in `backend/testdata/` for committed tests and demos.
 4. Preserve the milestone boundaries: parsing, categorization/review detection, totals, reporting, and API behavior stay separated.
@@ -150,6 +150,21 @@ Health check:
 ```text
 GET http://localhost:5000/health
 ```
+
+Process a CSV report:
+
+```http
+POST http://localhost:5000/api/expense-reports/process
+Content-Type: application/json
+
+{
+  "sourceName": "demo-main.csv",
+  "expectedTotal": 258248.00,
+  "csvText": "date,code,description,amount,installment,source_type,notes\n2026-04-01,DMO-0001,FRESHVALE MARKET DEMO,34500.00,,purchase,Synthetic grocery row for R001"
+}
+```
+
+The processing endpoint is deterministic. It does not use AI, persistence, authentication, file storage, PDF parsing, or Excel parsing.
 
 ## Data warning
 No real financial data should be committed. Use synthetic demo data only, and keep any local real files outside version control.

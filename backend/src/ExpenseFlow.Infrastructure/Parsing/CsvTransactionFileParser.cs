@@ -27,6 +27,13 @@ public sealed class CsvTransactionFileParser : ITransactionFileParser
                 [new FileValidationError(FileValidationErrorCode.EmptyInput, "CSV input is empty.")]));
         }
 
+        if (HasUnclosedQuotedField(csvText))
+        {
+            return Task.FromResult(TransactionFileParseResult.Failure(
+                sourceName,
+                [new FileValidationError(FileValidationErrorCode.MalformedCsv, "CSV input could not be parsed safely.")]));
+        }
+
         try
         {
             return Task.FromResult(Parse(csvText, sourceName, cancellationToken));
@@ -112,15 +119,39 @@ public sealed class CsvTransactionFileParser : ITransactionFileParser
     private static CsvConfiguration CreateConfiguration() =>
         new(CultureInfo.InvariantCulture)
         {
-            BadDataFound = null,
+            BadDataFound = args => throw new BadDataException(args.Field, args.RawRecord, args.Context),
             DetectColumnCountChanges = false,
             HeaderValidated = null,
+            LineBreakInQuotedFieldIsBadData = true,
             MissingFieldFound = null,
             TrimOptions = TrimOptions.None
         };
 
     private static string NormalizeHeader(string header) =>
         header.TrimStart('\uFEFF');
+
+    private static bool HasUnclosedQuotedField(string csvText)
+    {
+        var inQuotedField = false;
+
+        for (var index = 0; index < csvText.Length; index++)
+        {
+            if (csvText[index] != '"')
+            {
+                continue;
+            }
+
+            if (inQuotedField && index + 1 < csvText.Length && csvText[index + 1] == '"')
+            {
+                index++;
+                continue;
+            }
+
+            inQuotedField = !inQuotedField;
+        }
+
+        return inQuotedField;
+    }
 
     private static string? GetField(CsvReader csv, string columnName) =>
         csv.TryGetField(columnName, out string? value) ? value : null;

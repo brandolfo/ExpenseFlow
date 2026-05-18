@@ -19,18 +19,5 @@ public sealed class HealthEndpointTests
         Assert.Equal("Healthy", body?.Status);
     }
 
-    [Fact]
-    public async Task ProcessingEndpointIsNotImplementedBeforeMilestoneSeven()
-    {
-        await using var factory = new WebApplicationFactory<Program>();
-        using var client = factory.CreateClient();
-
-        using var response = await client.PostAsJsonAsync(
-            "/api/expense-reports/process",
-            new { sourceName = "demo-main.csv", csvText = "date,description,amount", expectedTotal = 0m });
-
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
     private sealed record HealthResponse(string Status);
 }
