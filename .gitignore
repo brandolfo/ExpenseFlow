@@ -1,0 +1,23 @@
+# Local private data and generated reports
+local-input/
+local-output/
+private-data/
+scratch/
+
+# .NET build artifacts
+bin/
+obj/
+TestResults/
+
+# IDE and editor state
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# OS generated files
+Thumbs.db
+Desktop.ini

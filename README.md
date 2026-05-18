@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Build plan defined; first implementation milestone can begin when explicitly requested. This repository intentionally contains no application code, .NET solution, database choice, endpoint implementation, or production infrastructure yet.
+Build plan accepted. Implementation is ready to begin with Milestone 1: create the .NET solution skeleton. This repository intentionally contains no application code, .NET solution, endpoint implementation, database persistence, or production infrastructure yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -93,7 +93,7 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Implement Milestone 0 and Milestone 1 from `docs/build-plan.md` when explicitly requested.
+1. Implement Milestone 1 from `docs/build-plan.md`: create the .NET solution skeleton.
 2. Keep commits small and milestone-oriented.
 3. Create actual synthetic fixtures only in the planned coding milestone.
 4. Keep implementation aligned with the acceptance tests, demo story, and backend architecture.
