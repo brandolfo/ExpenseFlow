@@ -101,3 +101,10 @@
 - Alternatives considered: Keep `ExpenseFlow.sln`, `src/`, and `tests/` at the repository root, or move product documentation under a separate documentation workspace instead.
 - Consequences: Backend commands should be run from `backend/`. Documentation should reference `backend/src`, `backend/tests`, and `backend/testdata` for implementation paths. Product scope, architecture style, and MVP exclusions remain unchanged.
 - Status: Accepted.
+
+### 2026-05-18 - Implement CSV parsing behind application parser abstraction
+- Decision: Milestone 4 uses CsvHelper inside `ExpenseFlow.Infrastructure` and exposes parsing through `ITransactionFileParser` in `ExpenseFlow.Application`. The domain remains independent from CsvHelper. Parsing validates required headers and row fields, preserves source row numbers and raw values, and does not perform categorization, totals, report generation, or AI behavior.
+- Context: The first MVP input is CSV, and the parser needs reliable header handling, row validation, and audit-preserving raw values without leaking infrastructure dependencies into domain logic.
+- Alternatives considered: Hand-roll CSV parsing in application/domain code, expose CsvHelper types through the application boundary, or combine parsing with categorization and reporting in one workflow step.
+- Consequences: CSV-specific behavior stays replaceable and testable behind an application abstraction. Domain code remains infrastructure-independent. Later milestones can build deterministic categorization, totals, and report generation on top of parsed rows without changing parser responsibilities.
+- Status: Accepted.
