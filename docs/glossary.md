@@ -65,3 +65,18 @@ A source row that is missing required data or contains values that cannot be saf
 
 ## Potential duplicate
 A transaction that looks similar enough to another transaction that it should be surfaced for review instead of silently merged or discarded.
+
+## CSV
+A structured text file format used as the first supported input format for the ExpenseFlow MVP.
+
+## Expected total validation
+The deterministic comparison between a separately provided expected total and the processed total calculated from eligible rows.
+
+## Processing run
+One conceptual execution of the ExpenseFlow workflow against a transaction file and optional expected total.
+
+## Category summary
+The report section that groups categorized transactions by category and shows deterministic counts and totals.
+
+## Excluded from totals
+A visible row state for transactions that should appear in the report but should not be included in processed or category totals under the MVP treatment rules.

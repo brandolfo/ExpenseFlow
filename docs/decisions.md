@@ -45,3 +45,24 @@
 - Alternatives considered: Begin backend architecture immediately, continue adding broad product documentation, or start implementation with unresolved contracts.
 - Consequences: Architecture starts later, but with less guessing and lower rework risk. The next documentation work should narrow the MVP into concrete examples and testable behavior instead of expanding future scope.
 - Status: Accepted.
+
+### 2026-05-18 - Define MVP input/output contract
+- Decision: The first supported input format will be CSV. Required columns are `date`, `description`, and `amount`. Optional columns are `code`, `installment`, `source_type`, and `notes`. Expected total is provided separately by the caller/user when processing starts, not inside the CSV. Excel and PDF are out of scope for the first implementation.
+- Context: The project audit identified input and output ambiguity as the main blocker before backend architecture. Product Manager, Domain Expert, Data Engineer, QA, and Backend Architect review supported a concrete product contract that keeps the MVP small and testable.
+- Alternatives considered: Support Excel immediately, include expected total inside the CSV, accept multiple localized input shapes in the MVP, or leave input/output details for architecture to decide.
+- Consequences: Architecture and implementation can proceed later with fewer guesses. The MVP is narrower and easier to test. Localized date formats, comma decimal separators, Excel, PDF, manual correction workflow, and advanced import flexibility are deferred.
+- Status: Accepted.
+
+### 2026-05-18 - Define MVP row treatment and review visibility
+- Decision: Manual review visibility is in the MVP, but manual correction workflow is deferred to Phase 2. Installments are processed as individual rows. Duplicate-looking rows are surfaced for review and not removed automatically. Negative/refund-like rows are visible and excluded from totals by default until refund policy is refined. Transfers/payments are visible, require review, and are not silently treated as ordinary spending.
+- Context: The domain model and audit identified refunds, transfers, installments, duplicates, and review behavior as unresolved implementation blockers. The MVP needs deterministic, visible treatment rules without expanding into a full correction system.
+- Alternatives considered: Automatically remove duplicates, group installments, include refunds in category totals by default, treat transfers as ordinary spending, or implement manual correction in the MVP.
+- Consequences: The first workflow preserves auditability and avoids silent financial assumptions. Some report totals may require review context, but the behavior is safer and easier to explain. Phase 2 can add correction history and richer treatment rules.
+- Status: Accepted.
+
+### 2026-05-18 - Define synthetic MVP demo dataset design
+- Decision: The MVP demo dataset will be synthetic CSV-shaped data using the input/output contract columns. The main mixed-behavior dataset will contain 22 synthetic rows covering categorized transactions, unknown merchants, invalid rows, refund-like negative amounts, transfer/payment-like rows, installment-like descriptions, duplicate-looking rows, total validation, category summaries, and auditability.
+- Context: The project audit required a concrete demo dataset before backend architecture. Product Manager, Domain Expert, Data Engineer, QA, and Security review supported a synthetic dataset that proves MVP behavior without using real financial data.
+- Alternatives considered: Use real personal exports locally, create only a happy path dataset, defer dataset design until implementation, or create actual CSV files immediately.
+- Consequences: Architecture and future acceptance tests can rely on concrete examples and deterministic expected outcomes. Actual CSV files are still deferred until explicitly requested. The dataset remains safe for public portfolio use because all merchants, codes, and examples are synthetic.
+- Status: Accepted.
