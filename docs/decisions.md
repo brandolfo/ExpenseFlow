@@ -24,3 +24,10 @@
 - Alternatives considered: Start with PDF parsing, add AI categorization immediately, build a broader expense management app, or begin with framework and database decisions.
 - Consequences: The first version remains small enough to build and validate. PDF support, AI assistance, dashboards, user accounts, and broader finance features are deferred. The product must prove trust through deterministic rules, total validation, review flags, auditability, and synthetic demo data.
 - Status: Accepted.
+
+### 2026-05-18 - Define initial domain model and category taxonomy
+- Decision: ExpenseFlow will model source rows, transactions, transaction states, categorization rules, review items, manual corrections, expense reports, validation, and audit trails as core domain concepts. The initial category taxonomy will stay small and review-oriented.
+- Context: The MVP requires clear domain language before implementation. Domain Expert and QA review emphasized that every row must be accounted for, totals must be deterministic, known merchant rules must take priority over AI, and manual correction is part of the business domain.
+- Alternatives considered: Leave the domain implicit until coding, start with a database-shaped model, start with a larger accounting taxonomy, or treat manual review as a later implementation concern.
+- Consequences: The product has clearer boundaries for future architecture and testing without choosing architecture or storage. Some detailed behaviors, such as refund handling and installment grouping, remain documented as domain decisions to refine before implementation.
+- Status: Accepted.

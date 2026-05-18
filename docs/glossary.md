@@ -44,3 +44,24 @@ A transaction that cannot be confidently categorized using deterministic rules.
 
 ## Synthetic data
 Artificial demo data that resembles realistic transactions without exposing real financial details or personal information.
+
+## Source row
+One row from the original transaction file. Every source row must be accounted for as categorized, invalid, requiring review, or another explicit documented state.
+
+## Transaction state
+The current domain status of a source row or transaction, such as received, invalid, review required, categorized, or excluded from totals.
+
+## Review item
+A transaction or source row that requires human inspection before it should be treated as final.
+
+## Manual correction
+A human change to a category, merchant interpretation, review status, or transaction treatment.
+
+## Rule conflict
+A case where multiple deterministic rules match the same transaction but point to different categories or outcomes.
+
+## Invalid row
+A source row that is missing required data or contains values that cannot be safely processed.
+
+## Potential duplicate
+A transaction that looks similar enough to another transaction that it should be surfaced for review instead of silently merged or discarded.
