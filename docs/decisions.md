@@ -31,3 +31,10 @@
 - Alternatives considered: Leave the domain implicit until coding, start with a database-shaped model, start with a larger accounting taxonomy, or treat manual review as a later implementation concern.
 - Consequences: The product has clearer boundaries for future architecture and testing without choosing architecture or storage. Some detailed behaviors, such as refund handling and installment grouping, remain documented as domain decisions to refine before implementation.
 - Status: Accepted.
+
+### 2026-05-18 - Define AI as review-first assistance for ambiguity
+- Decision: AI will be introduced later as structured, auditable assistance for ambiguous interpretation, starting with suggestions for transactions already marked as review required by deterministic processing.
+- Context: ExpenseFlow must demonstrate responsible AI use without allowing AI to replace financial logic. The MVP remains deterministic. AI Architect, Domain Expert, Security, and QA review emphasized that AI must not calculate totals, validate financial correctness, override known rules, or finalize low-confidence classifications without review.
+- Alternatives considered: Use AI for all categorization, use AI to reconcile totals, allow AI to create categories automatically, or omit AI design until implementation.
+- Consequences: Deterministic processing remains useful even when AI fails or is disabled. Future AI output must be structured, confidence-aware, auditable, privacy-conscious, and safe to reject. Known merchant rules take priority over AI suggestions.
+- Status: Accepted.
