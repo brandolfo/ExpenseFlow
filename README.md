@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Backend architecture defined; build planning can begin next. This repository intentionally contains no application code, .NET solution, database choice, endpoint design, or production infrastructure yet.
+Build plan defined; first implementation milestone can begin when explicitly requested. This repository intentionally contains no application code, .NET solution, database choice, endpoint implementation, or production infrastructure yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -28,7 +28,8 @@ Backend architecture defined; build planning can begin next. This repository int
 6. `docs/demo-story.md`
 7. `docs/ai-agent-design.md`
 8. `docs/backend-architecture.md`
-9. `docs/decisions.md`
+9. `docs/build-plan.md`
+10. `docs/decisions.md`
 
 ## Agent team overview
 ExpenseFlow uses role-based agent definitions to guide collaboration:
@@ -68,6 +69,7 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
     acceptance-tests.md
     demo-story.md
     backend-architecture.md
+    build-plan.md
   agents/
     founder-agent.md
     product-manager-agent.md
@@ -91,10 +93,10 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Create a build plan for the first ASP.NET Core / .NET vertical slice.
-2. Decide the first runnable demo interface and request/response shape.
-3. Create actual synthetic fixtures only when explicitly requested.
-4. Keep implementation aligned with the acceptance tests and backend architecture.
+1. Implement Milestone 0 and Milestone 1 from `docs/build-plan.md` when explicitly requested.
+2. Keep commits small and milestone-oriented.
+3. Create actual synthetic fixtures only in the planned coding milestone.
+4. Keep implementation aligned with the acceptance tests, demo story, and backend architecture.
 
 ## Data warning
 No real financial data should be committed. Use synthetic demo data only, and keep any local real files outside version control.

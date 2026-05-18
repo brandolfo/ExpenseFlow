@@ -87,3 +87,10 @@
 - Alternatives considered: Continue without choosing a stack, use microservices, use a single unstructured API project, choose a frontend-first architecture, or introduce AI/provider infrastructure in the MVP.
 - Consequences: Future implementation work should assume ASP.NET Core / .NET unless a new decision changes it. The MVP remains deterministic and excludes microservices, frontend, authentication, persistence, PDF/Excel parsing, real AI integration, and complex infrastructure. Architecture can now move into a build-plan phase without creating source code yet.
 - Status: Accepted.
+
+### 2026-05-18 - Define first ASP.NET Core vertical slice build plan
+- Decision: The first implementation sequence will follow `docs/build-plan.md`. The first API contract will accept JSON containing raw CSV text plus optional expected total, the first parser implementation will use CsvHelper behind `ITransactionFileParser`, xUnit will be used for tests, synthetic CSV fixtures will be created in the first coding phase after the solution skeleton, and tests will begin with the skeleton/domain milestones rather than waiting until the API is complete.
+- Context: The architecture document left several build-plan details open: request style, parser choice, fixture timing, and test order. Product, backend, domain, data, QA, DevOps, and technical writing review all favor an incremental, testable, one-developer path that proves the first vertical slice before expanding scope.
+- Alternatives considered: Start with multipart upload, accept local file paths through the API, hand-roll CSV parsing, delay fixtures until late integration testing, delay tests until after the endpoint exists, or combine all implementation work into one large commit.
+- Consequences: The first runnable MVP can be built in small commits while preserving auditability and deterministic behavior. Multipart upload, local file path workflows, Excel/PDF parsing, database persistence, authentication, frontend, AI integration, Docker, and cloud deployment remain deferred.
+- Status: Accepted.
