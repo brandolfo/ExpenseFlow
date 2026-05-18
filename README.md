@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Milestone 1 is complete. The repository now has the initial .NET 10 backend solution skeleton under `backend/`, project boundaries, and a minimal health endpoint. Expense processing, CSV parsing, categorization, validation, synthetic fixtures, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
+Milestone 2 is complete. The repository now has the initial .NET 10 backend solution skeleton under `backend/`, project boundaries, a minimal health endpoint, and public synthetic CSV fixtures under `backend/testdata/`. Expense processing, CSV parsing, categorization, validation, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -64,6 +64,11 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
       ExpenseFlow.UnitTests/
       ExpenseFlow.IntegrationTests/
     testdata/
+      README.md
+      demo-main.csv
+      demo-happy-path.csv
+      demo-invalid-rows.csv
+      demo-total-mismatch.csv
   docs/
     product-brief.md
     product-discovery.md
@@ -106,9 +111,9 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Implement Milestone 2 from `docs/build-plan.md`: create public synthetic CSV fixtures.
+1. Implement Milestone 3 from `docs/build-plan.md`: define the expense processing domain model.
 2. Keep commits small and milestone-oriented.
-3. Create actual synthetic fixtures only in the planned coding milestone.
+3. Use only the public synthetic fixtures in `backend/testdata/` for committed tests and demos.
 4. Keep implementation aligned with the acceptance tests, demo story, and backend architecture.
 
 ## Local development

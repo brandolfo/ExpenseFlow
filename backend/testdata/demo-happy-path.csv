@@ -1,0 +1,14 @@
+date,code,description,amount,installment,source_type,notes
+2026-04-01,DMO-0001,FRESHVALE MARKET DEMO,34500.00,,purchase,Synthetic grocery row for R001
+2026-04-02,DMO-0002,LOOPBEAN CAFE DEMO,4200.00,,purchase,Synthetic cafe row for R002
+2026-04-03,DMO-0003,CITYLINE TRANSIT DEMO,850.00,,purchase,Synthetic transit row for R003
+2026-04-04,DMO-0004,HOMEGRID UTILITY DEMO,18700.00,,purchase,Synthetic utility row for R004
+2026-04-05,DMO-0005,CLOUDNEST TOOLS SUBSCRIPTION DEMO,12999.00,,purchase,Synthetic software subscription row for R005
+2026-04-06,DMO-0006,WELLSPRING PHARMACY DEMO,7600.00,,purchase,Synthetic pharmacy row for R006
+2026-04-07,DMO-0007,BOOKHARBOR ACADEMY DEMO,9200.00,,purchase,Synthetic education row for R007
+2026-04-08,DMO-0008,STARLIGHT CINEMA DEMO,6500.00,,purchase,Synthetic entertainment row for R008
+2026-04-09,DMO-0009,TRAVELNOVA HOTEL DEMO,42500.00,,purchase,Synthetic travel row for R009
+2026-04-10,DMO-0010,CIVICFEE CARD SERVICE DEMO,2500.00,,fee,Synthetic fee row for R010
+2026-04-16,DMO-0016,PIXELGROVE ELECTRONICS DEMO,15000.00,03/06,purchase,Synthetic installment row for R015
+2026-04-17,DMO-0017,PIXELGROVE ELECTRONICS DEMO,15000.00,04/06,purchase,Synthetic installment row for R015
+2026-04-18,DMO-0018,PANTRYVALE EXPRESS DEMO,9800.00,,purchase,Synthetic grocery row for R016

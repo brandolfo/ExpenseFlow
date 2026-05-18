@@ -1,0 +1,5 @@
+date,code,description,amount,installment,source_type,notes
+2026-04-01,DMO-0001,FRESHVALE MARKET DEMO,34500.00,,purchase,Synthetic valid control row for R001
+2026-04-19,DMO-0020,,7000.00,,purchase,Synthetic invalid row with missing description
+2026-99-01,DMO-0021,RIDEHILL TAXI DEMO,2300.00,,purchase,Synthetic invalid row with impossible date
+2026-04-21,DMO-0022,RIDEHILL TAXI DEMO,abc,,purchase,Synthetic invalid row with non-numeric amount
