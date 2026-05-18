@@ -66,3 +66,10 @@
 - Alternatives considered: Use real personal exports locally, create only a happy path dataset, defer dataset design until implementation, or create actual CSV files immediately.
 - Consequences: Architecture and future acceptance tests can rely on concrete examples and deterministic expected outcomes. Actual CSV files are still deferred until explicitly requested. The dataset remains safe for public portfolio use because all merchants, codes, and examples are synthetic.
 - Status: Accepted.
+
+### 2026-05-18 - Define MVP acceptance tests as architecture entry gate
+- Decision: The deterministic MVP workflow now has executable-style acceptance tests covering the supported CSV contract, demo dataset behavior, row validation, deterministic categorization, review handling, totals, report completeness, auditability, no-AI scope, and synthetic data safety. Backend architecture is allowed only after the input/output contract, synthetic dataset design, and acceptance tests exist and remain aligned.
+- Context: The project audit identified acceptance tests as the final practical blocker before architecture. QA, Product Manager, Domain Expert, and Backend Architect review all support grounding future implementation in testable behavior rather than premature technical design.
+- Alternatives considered: Begin backend architecture without acceptance tests, write implementation tests before product-level acceptance tests, or keep acceptance criteria only as broad prose in the MVP scope.
+- Consequences: Future architecture can start with a clearer release gate and less guessing. The tests do not choose framework, database, endpoint, module structure, or application code. Any architecture proposal must preserve the documented deterministic behavior and auditability requirements.
+- Status: Accepted.
