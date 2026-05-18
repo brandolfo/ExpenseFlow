@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Milestone 2 is complete. The repository now has the initial .NET 10 backend solution skeleton under `backend/`, project boundaries, a minimal health endpoint, and public synthetic CSV fixtures under `backend/testdata/`. Expense processing, CSV parsing, categorization, validation, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
+Milestone 3 is complete. The repository now has the initial .NET 10 backend solution skeleton under `backend/`, public synthetic CSV fixtures under `backend/testdata/`, and the first domain model concepts for the deterministic MVP workflow. CSV parsing, categorization logic, total validation logic, API processing endpoints, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -111,7 +111,7 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Implement Milestone 3 from `docs/build-plan.md`: define the expense processing domain model.
+1. Implement Milestone 4 from `docs/build-plan.md`: parse CSV input and validate rows.
 2. Keep commits small and milestone-oriented.
 3. Use only the public synthetic fixtures in `backend/testdata/` for committed tests and demos.
 4. Keep implementation aligned with the acceptance tests, demo story, and backend architecture.
