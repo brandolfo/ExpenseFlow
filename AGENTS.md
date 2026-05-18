@@ -57,6 +57,7 @@ Before adding a feature, answer:
 
 ## Engineering decision rules
 When implementation begins:
+- Assume ASP.NET Core / .NET as the primary backend stack from the accepted backend architecture decision onward.
 - Prefer a modular monolith unless there is a strong reason not to.
 - Keep domain logic out of controllers.
 - Keep parsing, categorization, validation, reporting, and audit logic separated.
@@ -74,5 +75,5 @@ Every major decision should be recorded in /docs/decisions.md with:
 - Consequences
 
 ## Current phase
-Current phase: Product discovery and agent setup.
+Current phase: Backend architecture defined; build planning can begin next.
 Do not create application code until explicitly asked.

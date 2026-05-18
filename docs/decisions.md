@@ -80,3 +80,10 @@
 - Alternatives considered: Lead with the happy path dataset only, build a broader product tour, start with a frontend/dashboard demo, or move directly into backend architecture without a demo story.
 - Consequences: The project has a clearer portfolio story and first implementation target. The demo remains backend-focused and intentionally excludes frontend, persistence, AI, PDF/Excel support, actual fixture files, application code, test code, and architecture decisions until explicitly requested.
 - Status: Accepted.
+
+### 2026-05-18 - Define ASP.NET Core modular monolith backend stack
+- Decision: ExpenseFlow will be designed as a portfolio-grade ASP.NET Core / .NET backend using .NET 10 LTS, a pragmatic modular monolith, Minimal APIs for the first slice, testable domain/application logic, and replaceable infrastructure boundaries. The recommended solution structure is `ExpenseFlow.Api`, `ExpenseFlow.Application`, `ExpenseFlow.Domain`, and `ExpenseFlow.Infrastructure`, with unit and integration test projects.
+- Context: The MVP now has a concrete input/output contract, synthetic dataset design, acceptance tests, and demo story. Santiago's primary professional stack is .NET backend development, so the architecture should demonstrate .NET backend skill while remaining buildable by one developer.
+- Alternatives considered: Continue without choosing a stack, use microservices, use a single unstructured API project, choose a frontend-first architecture, or introduce AI/provider infrastructure in the MVP.
+- Consequences: Future implementation work should assume ASP.NET Core / .NET unless a new decision changes it. The MVP remains deterministic and excludes microservices, frontend, authentication, persistence, PDF/Excel parsing, real AI integration, and complex infrastructure. Architecture can now move into a build-plan phase without creating source code yet.
+- Status: Accepted.

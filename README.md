@@ -3,21 +3,32 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Product discovery and agent setup. This repository intentionally contains no application code, .NET solution, database choice, endpoint design, or production infrastructure yet.
+Backend architecture defined; build planning can begin next. This repository intentionally contains no application code, .NET solution, database choice, endpoint design, or production infrastructure yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
 - Create a serious portfolio project that demonstrates backend engineering depth.
-- Show backend value through data processing, validation, rules, auditability, asynchronous workflows, testing, clean architecture, and responsible AI.
+- Show backend value through ASP.NET Core / .NET data processing, validation, deterministic rules, auditability, testing, pragmatic architecture, and responsible future AI.
 - Use agents as role-based collaborators for product and engineering reasoning.
 - Keep deterministic financial logic separate from AI-assisted interpretation.
 
 ## Non-goals
 - Do not build a generic CRUD app.
-- Do not create application source code during the discovery phase.
-- Do not choose a database, architecture style, endpoints, entities, or libraries before the relevant decisions are documented.
+- Do not create application source code until the build plan is accepted and implementation is explicitly requested.
+- Do not create a database, endpoints, entities, or libraries before the relevant build decisions are documented.
 - Do not use real personal financial data in public files.
 - Do not allow AI to calculate totals or replace deterministic validation.
+
+## Reading path
+1. `docs/mvp-scope.md`
+2. `docs/input-output-contract.md`
+3. `docs/domain-model.md`
+4. `docs/demo-dataset-design.md`
+5. `docs/acceptance-tests.md`
+6. `docs/demo-story.md`
+7. `docs/ai-agent-design.md`
+8. `docs/backend-architecture.md`
+9. `docs/decisions.md`
 
 ## Agent team overview
 ExpenseFlow uses role-based agent definitions to guide collaboration:
@@ -48,6 +59,15 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
     roadmap.md
     risk-register.md
     demo-data-policy.md
+    mvp-scope.md
+    domain-model.md
+    ai-agent-design.md
+    project-audit.md
+    input-output-contract.md
+    demo-dataset-design.md
+    acceptance-tests.md
+    demo-story.md
+    backend-architecture.md
   agents/
     founder-agent.md
     product-manager-agent.md
@@ -71,11 +91,10 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Interview the first user about the current expense analysis workflow.
-2. Define the smallest useful MVP workflow.
-3. Document assumptions, risks, and initial product decisions.
-4. Define synthetic demo data requirements.
-5. Only after scope is clear, begin technical architecture decisions.
+1. Create a build plan for the first ASP.NET Core / .NET vertical slice.
+2. Decide the first runnable demo interface and request/response shape.
+3. Create actual synthetic fixtures only when explicitly requested.
+4. Keep implementation aligned with the acceptance tests and backend architecture.
 
 ## Data warning
 No real financial data should be committed. Use synthetic demo data only, and keep any local real files outside version control.
