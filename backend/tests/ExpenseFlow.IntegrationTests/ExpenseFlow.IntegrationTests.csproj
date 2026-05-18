@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ExpenseFlow.Api\ExpenseFlow.Api.csproj" />
+    <ProjectReference Include="..\..\src\ExpenseFlow.Infrastructure\ExpenseFlow.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\ExpenseFlow.Application\ExpenseFlow.Application.csproj" />
   </ItemGroup>
 
 </Project>
