@@ -8,6 +8,7 @@ scratch/
 bin/
 obj/
 TestResults/
+*.user
 
 # IDE and editor state
 .vs/

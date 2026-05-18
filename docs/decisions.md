@@ -94,3 +94,10 @@
 - Alternatives considered: Start with multipart upload, accept local file paths through the API, hand-roll CSV parsing, delay fixtures until late integration testing, delay tests until after the endpoint exists, or combine all implementation work into one large commit.
 - Consequences: The first runnable MVP can be built in small commits while preserving auditability and deterministic behavior. Multipart upload, local file path workflows, Excel/PDF parsing, database persistence, authentication, frontend, AI integration, Docker, and cloud deployment remain deferred.
 - Status: Accepted.
+
+### 2026-05-18 - Separate backend implementation under backend directory
+- Decision: The .NET solution, source projects, test projects, and future public synthetic backend fixtures will live under `backend/`, while product documents, agent definitions, and skills remain at the repository root.
+- Context: After creating the initial .NET skeleton, the root repository mixed backend implementation files with the project operating system files. A dedicated backend directory makes ownership and commands clearer without changing product scope.
+- Alternatives considered: Keep `ExpenseFlow.sln`, `src/`, and `tests/` at the repository root, or move product documentation under a separate documentation workspace instead.
+- Consequences: Backend commands should be run from `backend/`. Documentation should reference `backend/src`, `backend/tests`, and `backend/testdata` for implementation paths. Product scope, architecture style, and MVP exclusions remain unchanged.
+- Status: Accepted.

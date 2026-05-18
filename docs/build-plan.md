@@ -89,6 +89,7 @@ Decision:
 
 ### Local run strategy
 Use the local .NET SDK only:
+- `cd backend`
 - `dotnet restore`
 - `dotnet build`
 - `dotnet test`
@@ -153,7 +154,7 @@ Milestone notes:
 | Field | Plan |
 | --- | --- |
 | Goal | Create the ASP.NET Core / .NET solution structure with no business logic. |
-| Files/projects likely affected | `ExpenseFlow.sln`, `src/ExpenseFlow.Api`, `src/ExpenseFlow.Application`, `src/ExpenseFlow.Domain`, `src/ExpenseFlow.Infrastructure`, `tests/ExpenseFlow.UnitTests`, `tests/ExpenseFlow.IntegrationTests`. |
+| Files/projects likely affected | `backend/ExpenseFlow.sln`, `backend/src/ExpenseFlow.Api`, `backend/src/ExpenseFlow.Application`, `backend/src/ExpenseFlow.Domain`, `backend/src/ExpenseFlow.Infrastructure`, `backend/tests/ExpenseFlow.UnitTests`, `backend/tests/ExpenseFlow.IntegrationTests`. |
 | Behavior delivered | Solution builds; API has a health endpoint; project references are wired. |
 | Tests expected | Health endpoint integration test; solution build test via `dotnet build`; test runner works via `dotnet test`. |
 | Acceptance tests covered | None of the product behavior yet. Establishes harness for AT-001 through AT-028. |
@@ -171,7 +172,7 @@ Suggested references:
 | Field | Plan |
 | --- | --- |
 | Goal | Create public synthetic CSV fixtures matching the dataset design. |
-| Files/projects likely affected | A future synthetic fixture folder such as `testdata/` or `samples/`, unit/integration test fixture helpers. |
+| Files/projects likely affected | `backend/testdata/`, unit/integration test fixture helpers. |
 | Behavior delivered | Fixture files exist for repeatable tests and demos; no real data is committed. |
 | Tests expected | Static/privacy review of fixture content; fixture row-count tests. |
 | Acceptance tests covered | AT-001, AT-005, AT-017, AT-019, AT-026, AT-028 as test inputs. |
@@ -188,7 +189,7 @@ Fixture set:
 | Field | Plan |
 | --- | --- |
 | Goal | Define domain concepts needed by processing without infrastructure dependencies. |
-| Files/projects likely affected | `src/ExpenseFlow.Domain`, `tests/ExpenseFlow.UnitTests`. |
+| Files/projects likely affected | `backend/src/ExpenseFlow.Domain`, `backend/tests/ExpenseFlow.UnitTests`. |
 | Behavior delivered | Row statuses, categories, validation statuses, rule result concepts, transaction/report concepts. |
 | Tests expected | Unit tests for status/category values, row outcome invariants, and report count semantics. |
 | Acceptance tests covered | Supports AT-004 through AT-024. |
@@ -283,7 +284,7 @@ Recommended response style:
 | Field | Plan |
 | --- | --- |
 | Goal | Complete P0 acceptance coverage and verify the first vertical slice as a release candidate. |
-| Files/projects likely affected | `tests/ExpenseFlow.IntegrationTests`, `tests/ExpenseFlow.UnitTests`, fixture helpers, README test instructions. |
+| Files/projects likely affected | `backend/tests/ExpenseFlow.IntegrationTests`, `backend/tests/ExpenseFlow.UnitTests`, fixture helpers, README test instructions. |
 | Behavior delivered | Full dataset runs through API/application; release gate is enforced by tests. |
 | Tests expected | P0 acceptance-mapped tests for AT-001 through AT-028 where applicable. |
 | Acceptance tests covered | All P0 tests: AT-001 through AT-028. |
@@ -402,12 +403,13 @@ Do not add AI, database persistence, authentication, frontend, PDF parsing, Exce
 Tasks:
 1. Add repository ignore rules for future local private input/output folders.
 2. Create the .NET 10 solution skeleton with:
-   - src/ExpenseFlow.Api
-   - src/ExpenseFlow.Application
-   - src/ExpenseFlow.Domain
-   - src/ExpenseFlow.Infrastructure
-   - tests/ExpenseFlow.UnitTests
-   - tests/ExpenseFlow.IntegrationTests
+   - backend/ExpenseFlow.sln
+   - backend/src/ExpenseFlow.Api
+   - backend/src/ExpenseFlow.Application
+   - backend/src/ExpenseFlow.Domain
+   - backend/src/ExpenseFlow.Infrastructure
+   - backend/tests/ExpenseFlow.UnitTests
+   - backend/tests/ExpenseFlow.IntegrationTests
 3. Wire project references according to docs/backend-architecture.md.
 4. Add a simple health endpoint in the API.
 5. Add a minimal integration test for the health endpoint.

@@ -506,15 +506,19 @@ The architecture should make these future additions possible, but it should not 
 Recommended structure:
 
 ```text
-src/
-  ExpenseFlow.Api/
-  ExpenseFlow.Application/
-  ExpenseFlow.Domain/
-  ExpenseFlow.Infrastructure/
+backend/
+  ExpenseFlow.sln
+  src/
+    ExpenseFlow.Api/
+    ExpenseFlow.Application/
+    ExpenseFlow.Domain/
+    ExpenseFlow.Infrastructure/
 
-tests/
-  ExpenseFlow.UnitTests/
-  ExpenseFlow.IntegrationTests/
+  tests/
+    ExpenseFlow.UnitTests/
+    ExpenseFlow.IntegrationTests/
+
+  testdata/
 
 docs/
   ...

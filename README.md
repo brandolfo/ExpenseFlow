@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Build plan accepted. Implementation is ready to begin with Milestone 1: create the .NET solution skeleton. This repository intentionally contains no application code, .NET solution, endpoint implementation, database persistence, or production infrastructure yet.
+Milestone 1 is complete. The repository now has the initial .NET 10 backend solution skeleton under `backend/`, project boundaries, and a minimal health endpoint. Expense processing, CSV parsing, categorization, validation, synthetic fixtures, database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -51,6 +51,19 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 /
   AGENTS.md
   README.md
+  .gitignore
+  .github/
+  backend/
+    ExpenseFlow.sln
+    src/
+      ExpenseFlow.Api/
+      ExpenseFlow.Application/
+      ExpenseFlow.Domain/
+      ExpenseFlow.Infrastructure/
+    tests/
+      ExpenseFlow.UnitTests/
+      ExpenseFlow.IntegrationTests/
+    testdata/
   docs/
     product-brief.md
     product-discovery.md
@@ -93,10 +106,45 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Implement Milestone 1 from `docs/build-plan.md`: create the .NET solution skeleton.
+1. Implement Milestone 2 from `docs/build-plan.md`: create public synthetic CSV fixtures.
 2. Keep commits small and milestone-oriented.
 3. Create actual synthetic fixtures only in the planned coding milestone.
 4. Keep implementation aligned with the acceptance tests, demo story, and backend architecture.
+
+## Local development
+Restore dependencies:
+
+```powershell
+cd backend
+dotnet restore
+```
+
+Build the solution:
+
+```powershell
+cd backend
+dotnet build
+```
+
+Run tests:
+
+```powershell
+cd backend
+dotnet test
+```
+
+Run the API:
+
+```powershell
+cd backend
+dotnet run --project src/ExpenseFlow.Api
+```
+
+Health check:
+
+```text
+GET http://localhost:5000/health
+```
 
 ## Data warning
 No real financial data should be committed. Use synthetic demo data only, and keep any local real files outside version control.
