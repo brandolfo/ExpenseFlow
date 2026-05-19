@@ -129,3 +129,10 @@
 - Alternatives considered: Multipart upload, local file path input, putting processing orchestration directly in the Minimal API handler, returning `400` for row-level invalid data, leaking domain objects directly as the API contract, adding persistence, or adding authentication before the first slice.
 - Consequences: The first API is small, testable, and portfolio-readable. File-level failures are distinct from row-level invalid data. Endpoint DTOs can evolve independently from domain internals. Multipart upload, persistence, authentication, and production hardening remain future work.
 - Status: Accepted.
+
+### 2026-05-18 - Use fixture-backed integration tests as the MVP release gate
+- Decision: Milestone 8 treats endpoint-level and application-level tests using the committed synthetic fixtures as the deterministic MVP release gate. The gate must prove restore/build/test success, full source-row accounting, fixture safety, deterministic totals, expected-total validation, visible invalid/review/excluded rows, and no AI, database, authentication, frontend, Docker, or cloud dependency.
+- Context: The build plan and acceptance tests define AT-001 through AT-028 as the P0 release boundary. By Milestone 8, the processing workflow exists end-to-end, so release readiness should be enforced by executable tests rather than by prose alone.
+- Alternatives considered: Keep acceptance coverage as manual review only, rely only on unit tests, rely only on API smoke tests, or postpone fixture-backed release validation until portfolio polish.
+- Consequences: The MVP has a concrete, repeatable release gate. Future changes that drop rows, alter deterministic totals, weaken synthetic data safety, or add out-of-scope infrastructure should fail tests before release.
+- Status: Accepted.

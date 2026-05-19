@@ -3,7 +3,7 @@
 ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
 
 ## Current phase
-Milestone 7 is complete. CSV parsing, row validation, deterministic categorization, review detection, processed totals, trusted category totals, expected total validation, MVP report generation, and the first processing API endpoint are implemented. The endpoint accepts raw CSV text in JSON and preserves source row numbers and raw row values for auditability. The next step is Milestone 8: integration tests and release gate hardening. Database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
+Milestone 8 is complete. CSV parsing, row validation, deterministic categorization, review detection, processed totals, trusted category totals, expected total validation, MVP report generation, the first processing API endpoint, fixture-backed integration tests, and the MVP release gate are implemented. The next step is Milestone 9: portfolio polish. Database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
 
 ## Goals
 - Build a useful personal tool for analyzing expenses from exported financial files.
@@ -111,7 +111,7 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
 ```
 
 ## Next steps
-1. Implement Milestone 8 from `docs/build-plan.md`: integration tests and release gate hardening.
+1. Implement Milestone 9 from `docs/build-plan.md`: portfolio polish.
 2. Keep commits small and milestone-oriented.
 3. Use only the public synthetic fixtures in `backend/testdata/` for committed tests and demos.
 4. Preserve the milestone boundaries: parsing, categorization/review detection, totals, reporting, and API behavior stay separated.
@@ -137,6 +137,19 @@ Run tests:
 cd backend
 dotnet test
 ```
+
+## MVP release gate
+Before treating the deterministic MVP as release-ready:
+
+- `dotnet restore` succeeds from `backend/`.
+- `dotnet build` succeeds from `backend/`.
+- `dotnet test` succeeds from `backend/`.
+- `demo-main.csv` works end-to-end through `POST /api/expense-reports/process`.
+- Public fixtures remain synthetic and contain no real financial data.
+- The MVP has no AI dependency and does not use AI for categorization, totals, validation, or reconciliation.
+- No database, authentication, frontend, Docker, or cloud service is required.
+- No source row is silently dropped; invalid, review-required, excluded, duplicate-looking, and installment rows remain visible.
+- Expected total validation covers match, mismatch, and missing expected total behavior.
 
 Run the API:
 
