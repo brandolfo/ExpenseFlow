@@ -56,7 +56,7 @@ Implemented:
 - fixture-backed release gate
 - portfolio docs, demo script, API examples, interview pitch, and architecture summary
 
-Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually.
+Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually. The planned PDF statement ingestion phase is scoped in [docs/pdf-ingestion-plan.md](docs/pdf-ingestion-plan.md).
 
 ## Tech Stack
 
@@ -105,6 +105,7 @@ See [docs/architecture-summary.md](docs/architecture-summary.md) for the public-
     build-plan.md
     acceptance-tests.md
     demo-dataset-design.md
+    pdf-ingestion-plan.md
     decisions.md
   backend/
     ExpenseFlow.sln
@@ -276,6 +277,7 @@ Possible future work:
 - richer rule management
 - export formats for generated reports
 - Excel input parser behind the parser boundary
+- deterministic PDF statement ingestion from the scoped synthetic ICBC-like variants
 - responsible AI suggestions for already review-required transactions
 - frontend or dashboard once backend behavior is stable
 - authentication and multi-user support after product value is proven
