@@ -143,3 +143,10 @@
 - Alternatives considered: Leave the README as a milestone log only, rely on the long architecture document for portfolio review, create broad marketing copy without technical proof, or overemphasize future AI before the deterministic workflow is explained.
 - Consequences: The project is easier to review and demo while keeping scope honest. Future documentation should keep the README practical, keep examples aligned with tests, and clearly separate implemented MVP behavior from roadmap ideas.
 - Status: Accepted.
+
+### 2026-05-19 - Define PDF ingestion as a deterministic source-ingestion expansion
+- Decision: The next phase will plan PDF credit card statement ingestion as a source input expansion that extracts and normalizes transactions into the existing deterministic ExpenseFlow processing pipeline. The first PDF iteration will target one supported text-selectable statement shape and will exclude OCR, LLM extraction, LLM analysis, persistence, frontend, runtime multi-agent architecture, and application-level AI agents.
+- Context: MVP v0.1 is complete as a deterministic CSV processing backend. The next useful direction is to process credit card statement PDFs, but the project must preserve the CSV baseline, auditability, privacy, deterministic totals, and no-silent-row-loss behavior.
+- Alternatives considered: Build arbitrary PDF support immediately, use LLMs for extraction, add OCR as a fallback, create a separate PDF-specific financial pipeline, or treat repo-local agent files as runtime application agents.
+- Consequences: PDF work can start with privacy rules, synthetic fixtures, extraction traceability, and an ingestion boundary before implementation. Future OCR and LLM assistance remain possible but must be explicitly scoped later and must not replace deterministic financial processing.
+- Status: Accepted.
