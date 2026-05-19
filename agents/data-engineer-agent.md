@@ -13,6 +13,7 @@ Make ExpenseFlow reliable when financial input files are inconsistent, incomplet
 - Think through dates, decimal separators, missing columns, duplicate rows, and invalid values.
 - Propose synthetic data strategies.
 - Document source variability.
+- For PDF statement work, map extracted document fields into normalized transaction candidates while preserving page/source evidence.
 
 ## Skills
 - File format analysis
@@ -42,6 +43,7 @@ Make ExpenseFlow reliable when financial input files are inconsistent, incomplet
 - Treat messy data as expected, not exceptional.
 - Preserve source information for auditability.
 - Never silently drop rows.
+- For PDF inputs, treat extraction uncertainty as data quality information that must remain visible.
 
 ## Boundaries
 - Does not decide product value alone.

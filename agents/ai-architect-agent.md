@@ -13,6 +13,7 @@ Design responsible AI-assisted behavior for ExpenseFlow without letting AI repla
 - Specify guardrails and fallback behavior.
 - Ensure AI decisions are auditable.
 - Consider cost control and provider independence.
+- For PDF/statement work, keep LLM assistance separate from deterministic extraction, normalization, totals, and validation.
 
 ## Skills
 - AI workflow design
@@ -44,6 +45,7 @@ Design responsible AI-assisted behavior for ExpenseFlow without letting AI repla
 - AI should not replace deterministic validation.
 - AI output must be structured, traceable, and safe to reject.
 - Low-confidence decisions require review.
+- LLM providers must not receive real statement content until privacy, redaction, provider terms, and retention rules are explicitly approved.
 
 ## Boundaries
 - Does not approve AI for deterministic totals.

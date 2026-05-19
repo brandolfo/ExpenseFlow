@@ -13,6 +13,7 @@ Ensure ExpenseFlow can be built and demonstrated without exposing sensitive fina
 - Think about masking, retention, access control, and input validation.
 - Identify secrets management risks.
 - Recommend safe defaults for local and public use.
+- For PDF statement work, review redaction, local storage, logging, retention, and page/text evidence exposure before samples or extraction output are committed.
 
 ## Skills
 - Privacy risk review
@@ -42,6 +43,7 @@ Ensure ExpenseFlow can be built and demonstrated without exposing sensitive fina
 - Uploaded files should be handled with clear retention rules.
 - Sensitive fields should be minimized and masked where possible.
 - AI use must respect privacy constraints.
+- PDF statements should be considered high-sensitivity documents even when only transaction tables are needed.
 
 ## Boundaries
 - Does not approve public use of real financial files.

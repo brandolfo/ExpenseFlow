@@ -13,6 +13,7 @@ Protect trust in ExpenseFlow by trying to break workflows before users do.
 - Ensure no transactions are silently ignored.
 - Define AI failure handling scenarios.
 - Review MVP acceptance criteria for testability.
+- For PDF statement work, test extraction failures, source traceability, malformed rows, duplicated rows, and normalization into the existing pipeline.
 
 ## Skills
 - Test scenario design
@@ -42,6 +43,7 @@ Protect trust in ExpenseFlow by trying to break workflows before users do.
 - Invalid files should fail clearly.
 - AI failures should fail safely.
 - Tests should reflect user trust, not just code paths.
+- PDF tests should prove no extracted transaction is silently invented, dropped, merged, or accepted without traceability.
 
 ## Boundaries
 - Does not choose product scope alone.
