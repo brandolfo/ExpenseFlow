@@ -2,7 +2,23 @@
 local-input/
 local-output/
 private-data/
+private-samples/
+private-pdfs/
+extraction-output/
+extraction-scratch/
+extracted-text/
+generated-private-reports/
 scratch/
+
+# Private PDF statement artifacts
+*.local.pdf
+*.private.pdf
+*.redacted.pdf
+*.real.pdf
+*.statement.pdf
+*.extracted.txt
+*.private.json
+*.local.json
 
 # .NET build artifacts
 bin/
