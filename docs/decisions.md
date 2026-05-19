@@ -136,3 +136,10 @@
 - Alternatives considered: Keep acceptance coverage as manual review only, rely only on unit tests, rely only on API smoke tests, or postpone fixture-backed release validation until portfolio polish.
 - Consequences: The MVP has a concrete, repeatable release gate. Future changes that drop rows, alter deterministic totals, weaken synthetic data safety, or add out-of-scope infrastructure should fail tests before release.
 - Status: Accepted.
+
+### 2026-05-19 - Treat README and demo docs as portfolio entrypoints
+- Decision: Milestone 9 positions `README.md` as the main portfolio entrypoint and adds concise demo, API, interview, and architecture documents as supporting artifacts. The public story emphasizes deterministic backend processing, auditability, release-gate tests, and responsible future AI without claiming AI is used in the MVP.
+- Context: The MVP implementation and release gate are complete, so recruiters, interviewers, and backend developers need a fast path to understand the product value, run the API, inspect examples, and discuss architecture trade-offs without reading every planning document.
+- Alternatives considered: Leave the README as a milestone log only, rely on the long architecture document for portfolio review, create broad marketing copy without technical proof, or overemphasize future AI before the deterministic workflow is explained.
+- Consequences: The project is easier to review and demo while keeping scope honest. Future documentation should keep the README practical, keep examples aligned with tests, and clearly separate implemented MVP behavior from roadmap ideas.
+- Status: Accepted.

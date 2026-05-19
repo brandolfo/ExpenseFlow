@@ -1,58 +1,111 @@
 # ExpenseFlow
 
-ExpenseFlow is a backend-focused expense intelligence product that turns messy financial transaction files into categorized, validated, and useful reports.
+ExpenseFlow is a portfolio-grade ASP.NET Core backend that turns messy CSV expense exports into categorized, validated, auditable reports.
 
-## Current phase
-Milestone 8 is complete. CSV parsing, row validation, deterministic categorization, review detection, processed totals, trusted category totals, expected total validation, MVP report generation, the first processing API endpoint, fixture-backed integration tests, and the MVP release gate are implemented. The next step is Milestone 9: portfolio polish. Database persistence, AI integration, frontend, Docker, and production infrastructure are intentionally not implemented yet.
+It is intentionally not a generic CRUD app and not a ChatGPT wrapper. The MVP demonstrates deterministic financial data processing first: parsing, validation, categorization rules, review visibility, totals, expected-total validation, structured API responses, and integration tests.
 
-## Goals
-- Build a useful personal tool for analyzing expenses from exported financial files.
-- Create a serious portfolio project that demonstrates backend engineering depth.
-- Show backend value through ASP.NET Core / .NET data processing, validation, deterministic rules, auditability, testing, pragmatic architecture, and responsible future AI.
-- Use agents as role-based collaborators for product and engineering reasoning.
-- Keep deterministic financial logic separate from AI-assisted interpretation.
+## What It Does
 
-## Non-goals
-- Do not build a generic CRUD app.
-- Do not create application source code until the build plan is accepted and implementation is explicitly requested.
-- Do not create a database, endpoints, entities, or libraries before the relevant build decisions are documented.
-- Do not use real personal financial data in public files.
-- Do not allow AI to calculate totals or replace deterministic validation.
+ExpenseFlow accepts raw CSV text and an optional expected total, then returns a structured expense report.
 
-## Reading path
-1. `docs/mvp-scope.md`
-2. `docs/input-output-contract.md`
-3. `docs/domain-model.md`
-4. `docs/demo-dataset-design.md`
-5. `docs/acceptance-tests.md`
-6. `docs/demo-story.md`
-7. `docs/ai-agent-design.md`
-8. `docs/backend-architecture.md`
-9. `docs/build-plan.md`
-10. `docs/decisions.md`
+The deterministic workflow is:
 
-## Agent team overview
-ExpenseFlow uses role-based agent definitions to guide collaboration:
-- Founder Agent protects focus, business value, and execution speed.
-- Product Manager Agent turns vision into MVP scope, user stories, and acceptance criteria.
-- UX Researcher Agent studies the current workflow, friction, trust issues, and desired outputs.
-- Domain Expert Agent models expense processing concepts, rules, validation, and ambiguity.
-- AI Architect Agent defines responsible AI use, structured output, guardrails, and auditability.
-- Backend Architect Agent designs maintainable backend structure after product scope is clearer.
-- Data Engineer Agent handles messy files, parsing risks, normalization, and synthetic datasets.
-- QA Agent defines test scenarios, edge cases, acceptance tests, and failure modes.
-- Security Agent protects privacy, secrets, financial data, and safe demo practices.
-- DevOps Agent enters later for reproducibility, CI/CD, deployment, and operations.
-- Technical Writer Agent makes the project understandable and portfolio-ready.
-- Marketing Agent positions the project for GitHub, LinkedIn, CVs, and interviews.
+```text
+CSV input -> row validation -> deterministic categorization -> review/exclusion detection -> totals -> report -> API response
+```
 
-## Repository structure
+The current MVP:
+
+- accepts the documented CSV shape with required `date`, `description`, and `amount` columns
+- preserves source row numbers and raw values for auditability
+- categorizes known merchants and stable patterns with deterministic seed rules
+- flags unknown, ambiguous, conflicting, duplicate-looking, refund-like, and transfer-like rows for review or exclusion
+- keeps invalid rows visible instead of dropping them
+- calculates processed totals and trusted category totals in code
+- compares processed totals against an externally provided expected total
+- returns a structured JSON report through a Minimal API endpoint
+- uses synthetic fixtures only
+- does not use AI in the MVP workflow
+
+## Why This Project Exists
+
+Expense exports are often structured enough to process, but still messy enough that manual spreadsheet work becomes repetitive and easy to get wrong. ExpenseFlow focuses on the backend problem behind that workflow: turn transaction rows into a report that is explainable, testable, and trustworthy.
+
+For portfolio purposes, the project is designed to show backend judgment:
+
+- clear input/output contracts
+- deterministic financial logic
+- edge-case handling without silent assumptions
+- auditability from source row to report
+- clean project boundaries
+- fixture-backed integration tests
+- responsible future AI positioning
+
+## Current MVP Status
+
+Milestone 9 is complete. The deterministic MVP is implemented and documented for portfolio review.
+
+Implemented:
+
+- .NET solution and ASP.NET Core Minimal API
+- CSV parser using CsvHelper behind an application abstraction
+- deterministic categorization and review detection
+- totals, category summaries, expected-total validation, and MVP report generation
+- `POST /api/expense-reports/process`
+- unit and integration tests
+- fixture-backed release gate
+- portfolio docs, demo script, API examples, interview pitch, and architecture summary
+
+Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually.
+
+## Tech Stack
+
+- .NET 10
+- ASP.NET Core Minimal APIs
+- C#
+- CsvHelper for CSV parsing
+- xUnit
+- Microsoft.AspNetCore.Mvc.Testing for API integration tests
+
+No database, authentication, frontend, Docker, cloud infrastructure, PDF parsing, Excel parsing, background jobs, or AI provider is required for the MVP.
+
+## Architecture Overview
+
+ExpenseFlow uses a pragmatic modular monolith:
+
+```text
+ExpenseFlow.Api
+  HTTP request/response mapping and DI composition
+
+ExpenseFlow.Application
+  workflow orchestration, parser/reporting abstractions, deterministic processing services
+
+ExpenseFlow.Domain
+  transaction statuses, categories, report concepts, audit concepts, validation concepts
+
+ExpenseFlow.Infrastructure
+  CSV parser implementation and replaceable external adapters
+```
+
+The first endpoint stays thin: it validates request shape, calls the application processing service, and maps the report to API DTOs. Parsing, categorization, totals, report generation, and audit decisions live outside the API handler.
+
+See [docs/architecture-summary.md](docs/architecture-summary.md) for the public-friendly architecture explanation.
+
+## Repository Structure
+
 ```text
 /
-  AGENTS.md
   README.md
-  .gitignore
-  .github/
+  AGENTS.md
+  docs/
+    architecture-summary.md
+    api-examples.md
+    demo-script.md
+    interview-pitch.md
+    build-plan.md
+    acceptance-tests.md
+    demo-dataset-design.md
+    decisions.md
   backend/
     ExpenseFlow.sln
     src/
@@ -64,59 +117,14 @@ ExpenseFlow uses role-based agent definitions to guide collaboration:
       ExpenseFlow.UnitTests/
       ExpenseFlow.IntegrationTests/
     testdata/
-      README.md
       demo-main.csv
       demo-happy-path.csv
       demo-invalid-rows.csv
       demo-total-mismatch.csv
-  docs/
-    product-brief.md
-    product-discovery.md
-    assumptions.md
-    decisions.md
-    glossary.md
-    roadmap.md
-    risk-register.md
-    demo-data-policy.md
-    mvp-scope.md
-    domain-model.md
-    ai-agent-design.md
-    project-audit.md
-    input-output-contract.md
-    demo-dataset-design.md
-    acceptance-tests.md
-    demo-story.md
-    backend-architecture.md
-    build-plan.md
-  agents/
-    founder-agent.md
-    product-manager-agent.md
-    ux-researcher-agent.md
-    domain-expert-agent.md
-    ai-architect-agent.md
-    backend-architect-agent.md
-    data-engineer-agent.md
-    qa-agent.md
-    security-agent.md
-    devops-agent.md
-    technical-writer-agent.md
-    marketing-agent.md
-  skills/
-    product-discovery/SKILL.md
-    expense-domain-analysis/SKILL.md
-    ai-agent-design/SKILL.md
-    backend-architecture-review/SKILL.md
-    test-case-generation/SKILL.md
-    portfolio-positioning/SKILL.md
 ```
 
-## Next steps
-1. Implement Milestone 9 from `docs/build-plan.md`: portfolio polish.
-2. Keep commits small and milestone-oriented.
-3. Use only the public synthetic fixtures in `backend/testdata/` for committed tests and demos.
-4. Preserve the milestone boundaries: parsing, categorization/review detection, totals, reporting, and API behavior stay separated.
+## Run Locally
 
-## Local development
 Restore dependencies:
 
 ```powershell
@@ -124,7 +132,7 @@ cd backend
 dotnet restore
 ```
 
-Build the solution:
+Build:
 
 ```powershell
 cd backend
@@ -138,19 +146,6 @@ cd backend
 dotnet test
 ```
 
-## MVP release gate
-Before treating the deterministic MVP as release-ready:
-
-- `dotnet restore` succeeds from `backend/`.
-- `dotnet build` succeeds from `backend/`.
-- `dotnet test` succeeds from `backend/`.
-- `demo-main.csv` works end-to-end through `POST /api/expense-reports/process`.
-- Public fixtures remain synthetic and contain no real financial data.
-- The MVP has no AI dependency and does not use AI for categorization, totals, validation, or reconciliation.
-- No database, authentication, frontend, Docker, or cloud service is required.
-- No source row is silently dropped; invalid, review-required, excluded, duplicate-looking, and installment rows remain visible.
-- Expected total validation covers match, mismatch, and missing expected total behavior.
-
 Run the API:
 
 ```powershell
@@ -160,24 +155,142 @@ dotnet run --project src/ExpenseFlow.Api
 
 Health check:
 
-```text
+```http
 GET http://localhost:5000/health
 ```
 
-Process a CSV report:
+## API Endpoint
 
 ```http
 POST http://localhost:5000/api/expense-reports/process
 Content-Type: application/json
+```
 
+Request shape:
+
+```json
 {
   "sourceName": "demo-main.csv",
   "expectedTotal": 258248.00,
-  "csvText": "date,code,description,amount,installment,source_type,notes\n2026-04-01,DMO-0001,FRESHVALE MARKET DEMO,34500.00,,purchase,Synthetic grocery row for R001"
+  "csvText": "date,code,description,amount,installment,source_type,notes\n..."
 }
 ```
 
-The processing endpoint is deterministic. It does not use AI, persistence, authentication, file storage, PDF parsing, or Excel parsing.
+PowerShell example using the full synthetic fixture from a second terminal at the repository root:
 
-## Data warning
-No real financial data should be committed. Use synthetic demo data only, and keep any local real files outside version control.
+```powershell
+$csv = Get-Content -Raw .\backend\testdata\demo-main.csv
+$body = @{
+  sourceName = "demo-main.csv"
+  expectedTotal = 258248.00
+  csvText = $csv
+} | ConvertTo-Json -Depth 5
+
+Invoke-RestMethod `
+  -Uri "http://localhost:5000/api/expense-reports/process" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+See [docs/api-examples.md](docs/api-examples.md) for success, invalid-row, missing-header, missing-expected-total, and mismatch examples.
+
+## Example Response Summary
+
+Processing `backend/testdata/demo-main.csv` with expected total `258248.00` returns:
+
+| Field | Expected value |
+| --- | ---: |
+| Source rows | 22 |
+| Valid rows | 19 |
+| Review-required rows | 6 |
+| Invalid rows | 3 |
+| Excluded-from-totals rows | 2 |
+| Potential duplicate rows | 1 |
+| Processed total | 258248.00 |
+| Trusted category total | 189149.00 |
+| Expected total validation | Match |
+
+The response includes:
+
+- report metadata
+- processing counts
+- totals
+- expected total validation
+- category summary
+- transaction details
+- review items
+- invalid rows
+- excluded rows
+- audit summary
+
+## Demo Dataset
+
+The committed fixtures in `backend/testdata/` are synthetic and public-safe:
+
+- `demo-main.csv`: 22-row mixed-behavior dataset for the main demo
+- `demo-happy-path.csv`: all categorized rows, no review or invalid rows
+- `demo-invalid-rows.csv`: one valid row plus invalid date, missing description, and invalid amount
+- `demo-total-mismatch.csv`: same rows as main, intended for mismatch validation with expected total `260000.00`
+
+No real financial data should be committed. Keep any private local files outside version control.
+
+## Release Gate
+
+Before treating the deterministic MVP as release-ready:
+
+- `dotnet restore` succeeds from `backend/`
+- `dotnet build` succeeds from `backend/`
+- `dotnet test` succeeds from `backend/`
+- `demo-main.csv` works end-to-end through `POST /api/expense-reports/process`
+- public fixtures remain synthetic
+- no source row is silently dropped
+- invalid, review-required, excluded, duplicate-looking, and installment rows remain visible
+- expected total validation covers match, mismatch, and missing expected total behavior
+- the MVP has no AI, database, authentication, frontend, Docker, cloud, PDF, or Excel dependency
+
+## Intentionally Out Of Scope
+
+The MVP deliberately excludes:
+
+- AI integration
+- database persistence
+- authentication and user accounts
+- frontend/dashboard
+- Docker or cloud deployment
+- PDF parsing
+- Excel parsing
+- manual correction workflow
+- background jobs
+- generic CRUD expense management
+- financial advice, budgeting, forecasting, or alerts
+
+Future AI can assist review-required rows later, but it must not calculate totals, validate totals, override deterministic rules, or silently finalize ambiguous classifications.
+
+## Future Roadmap
+
+Possible future work:
+
+- manual correction workflow and correction history
+- persisted report history
+- richer rule management
+- export formats for generated reports
+- Excel input parser behind the parser boundary
+- responsible AI suggestions for already review-required transactions
+- frontend or dashboard once backend behavior is stable
+- authentication and multi-user support after product value is proven
+- CI/CD and deployment hardening
+
+## Portfolio And Interview Positioning
+
+The strongest interview story is:
+
+ExpenseFlow demonstrates backend engineering through a trustworthy file-to-report workflow. It parses a synthetic CSV, validates rows, applies deterministic rules, surfaces ambiguity instead of guessing, calculates totals without AI, validates against an expected total, and returns an auditable JSON report. The code is split across API, Application, Domain, and Infrastructure projects, with unit and integration tests guarding the release gate.
+
+Useful docs for review:
+
+- [docs/demo-script.md](docs/demo-script.md)
+- [docs/api-examples.md](docs/api-examples.md)
+- [docs/interview-pitch.md](docs/interview-pitch.md)
+- [docs/architecture-summary.md](docs/architecture-summary.md)
+- [docs/acceptance-tests.md](docs/acceptance-tests.md)
