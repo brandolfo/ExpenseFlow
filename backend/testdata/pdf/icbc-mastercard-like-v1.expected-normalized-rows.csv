@@ -1,0 +1,11 @@
+row_number,source_name,statement_shape,source_page,extraction_order,date,code,description,amount,currency,installment,source_type,notes,expected_extraction_status,expected_warning
+1,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,1,1,2035-02-03,SMC-1001,AURORA SUPPLY SYNTHETIC,22100.00,ARS,,purchase,compras del mes ordinary purchase,normalized,
+2,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,1,2,2035-02-04,SMC-1002,RIVERTRAIN SYNTHETIC,1880.50,ARS,,purchase,compras del mes transport-like purchase,normalized,
+3,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,1,3,2035-02-07,SMC-1003,LIGHTGRID AUTOPAY SYNTHETIC,7640.00,ARS,,automatic_debit,debitos automaticos subsection row,normalized,
+4,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,4,2035-02-11,SMC-1004,NOVA DEVICE SYNTHETIC 01/06,9500.00,ARS,01/06,installment,cuotas del mes first installment row,normalized,
+5,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,5,2035-02-12,SMC-1005,NOVA DEVICE SYNTHETIC 06/06,9500.00,ARS,06/06,installment,cuotas del mes final installment row,normalized,
+6,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,6,2035-02-15,SMC-1006,CREDIT ADJUSTMENT SYNTHETIC,-3200.00,ARS,,adjustment,negative credit-like row should remain visible,normalized,
+7,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,3,7,2035-02-18,SMC-1007,SERVICE FEE SYNTHETIC,540.75,ARS,,fee,synthetic service fee row,normalized,
+8,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,3,8,2035-02-20,SMC-1008,BORDERLESS APP SYNTHETIC,18.25,USD,,purchase,foreign currency evidence only not trusted total input,normalized,
+9,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,3,9,2035-02-22,SMC-1009,PAYMENT RECEIVED SYNTHETIC,-25000.00,ARS,,payment,negative payment-like row should remain visible,normalized,
+10,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,3,10,,SMC-1010,BROKEN SYNTHETIC CANDIDATE,,ARS,,unknown,transaction-like candidate with missing date and amount,invalid,missing_date_and_amount

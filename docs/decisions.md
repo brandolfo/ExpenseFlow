@@ -164,3 +164,10 @@
 - Alternatives considered: Add a PDF implementation behind `ITransactionFileParser`, expose PDF library types directly through Application, add a public PDF endpoint first, create a broad generic ingestion framework, or wait until PdfPig is added to define the contract.
 - Consequences: The boundary preserves current CSV processing while making PDF extraction traceable and testable. Future PDF work can map normalized extracted rows into the existing parsed transaction candidate shape. Infrastructure can later implement the extractor with PdfPig or another accepted library without leaking that dependency into Application or Domain.
 - Status: Accepted.
+
+### 2026-05-20 - Start PDF fixtures with specs and expected normalized rows
+- Decision: PDF-2 starts with committed synthetic fixture specifications and expected normalized-row CSV files for `icbc-visa-like-v1` and `icbc-mastercard-like-v1` before committing generated PDF binaries. QuestPDF is not added in PDF-2 because actual PDF generation is deferred to a later fixture-generation milestone.
+- Context: The PDF phase needs public, reviewable extraction targets before real extraction code exists, but adding binary PDFs or a PDF generation package now would expand the milestone beyond fixture strategy. Specs and expected rows are enough to define section markers, page traceability, source fields, warning expectations, and no-silent-row-loss scenarios for PDF-3/PDF-4.
+- Alternatives considered: Generate actual PDFs immediately with QuestPDF, commit only prose without expected rows, use anonymized real statements, wait until extraction code exists to define fixtures, or include categorization/reporting expectations in the PDF fixture files.
+- Consequences: Future PDF extraction work has concrete synthetic targets without adding libraries, parsing code, endpoints, OCR, LLM behavior, or private data risk. The expected rows remain extraction/normalization fixtures only and do not define categories, processed totals, or expected-total validation.
+- Status: Accepted.
