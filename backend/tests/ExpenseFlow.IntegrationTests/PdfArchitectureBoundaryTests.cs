@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
+using ExpenseFlow.Application.Abstractions;
 using ExpenseFlow.Infrastructure.Files;
+using ExpenseFlow.Infrastructure.Pdf;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ExpenseFlow.IntegrationTests;
@@ -25,7 +27,7 @@ public sealed class PdfArchitectureBoundaryTests
     }
 
     [Fact]
-    public void InfrastructureDoesNotContainRealPdfExtractorYet()
+    public void InfrastructureContainsPdfPigExtractorForPdf3()
     {
         var infrastructureTypes = typeof(InfrastructureAssemblyMarker)
             .Assembly
@@ -33,8 +35,8 @@ public sealed class PdfArchitectureBoundaryTests
             .Where(type => type.Namespace?.StartsWith("ExpenseFlow.Infrastructure", StringComparison.Ordinal) == true)
             .ToArray();
 
-        Assert.DoesNotContain(infrastructureTypes, type => type.Name.Contains("Pdf", StringComparison.OrdinalIgnoreCase));
-        Assert.DoesNotContain(infrastructureTypes, type => type.Name.Contains("StatementExtractor", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(typeof(PdfPigPdfStatementExtractor), infrastructureTypes);
+        Assert.True(typeof(IPdfStatementExtractor).IsAssignableFrom(typeof(PdfPigPdfStatementExtractor)));
     }
 
     [Fact]
@@ -42,7 +44,7 @@ public sealed class PdfArchitectureBoundaryTests
     {
         var backendDirectory = GetBackendDirectory();
         var projectFiles = Directory.EnumerateFiles(Path.Combine(backendDirectory, "src"), "*.csproj", SearchOption.AllDirectories);
-        var forbiddenTerms = new[] { "PdfPig", "QuestPDF", "OpenAI", "OpenAi", "Tesseract", "DocumentIntelligence" };
+        var forbiddenTerms = new[] { "QuestPDF", "OpenAI", "OpenAi", "Tesseract", "DocumentIntelligence" };
 
         foreach (var projectFile in projectFiles)
         {
@@ -52,6 +54,39 @@ public sealed class PdfArchitectureBoundaryTests
             {
                 Assert.DoesNotContain(term, text, StringComparison.OrdinalIgnoreCase);
             }
+        }
+    }
+
+    [Fact]
+    public void PdfPigReferenceIsIsolatedToInfrastructureProject()
+    {
+        var backendDirectory = GetBackendDirectory();
+        var sourceProjectFiles = Directory.EnumerateFiles(Path.Combine(backendDirectory, "src"), "*.csproj", SearchOption.AllDirectories);
+
+        var pdfPigProjects = sourceProjectFiles
+            .Where(projectFile => File.ReadAllText(projectFile).Contains("PdfPig", StringComparison.OrdinalIgnoreCase))
+            .Select(projectFile => Path.GetRelativePath(backendDirectory, projectFile).Replace('\\', '/'))
+            .ToArray();
+
+        Assert.Equal(["src/ExpenseFlow.Infrastructure/ExpenseFlow.Infrastructure.csproj"], pdfPigProjects);
+    }
+
+    [Fact]
+    public void ApplicationDomainAndApiProjectsDoNotReferencePdfPig()
+    {
+        var backendDirectory = GetBackendDirectory();
+        var forbiddenProjects = new[]
+        {
+            "src/ExpenseFlow.Application/ExpenseFlow.Application.csproj",
+            "src/ExpenseFlow.Domain/ExpenseFlow.Domain.csproj",
+            "src/ExpenseFlow.Api/ExpenseFlow.Api.csproj"
+        };
+
+        foreach (var projectFile in forbiddenProjects)
+        {
+            var text = File.ReadAllText(Path.Combine(backendDirectory, projectFile));
+
+            Assert.DoesNotContain("PdfPig", text, StringComparison.OrdinalIgnoreCase);
         }
     }
 

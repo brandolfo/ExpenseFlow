@@ -178,3 +178,10 @@
 - Alternatives considered: Hand-create PDFs outside the repository, add QuestPDF to production Infrastructure, generate PDFs only during tests without committing them, add PdfPig now to validate text extraction, or continue with specs only.
 - Consequences: Future extraction tests can target committed public PDFs while production code remains free of fixture-generation dependencies. The generator can be rerun when expected rows change, but it must never read private statements or use private data.
 - Status: Accepted.
+
+### 2026-05-20 - Use PdfPig in Infrastructure for PDF-3 raw text extraction
+- Decision: PDF-3 uses `UglyToad.PdfPig` only in `ExpenseFlow.Infrastructure` through `PdfPigPdfStatementExtractor` to extract raw text lines from committed synthetic, text-selectable PDF fixtures with source name, statement-shape, page, and extraction-order traceability.
+- Context: The PDF-1 application boundary exists, and PDF-3 needs the first deterministic extraction prototype without adding transaction normalization, OCR, LLM integration, external APIs, persistence, API endpoints, or CSV behavior changes. Raw line output was added to the application-level extraction result so this milestone can expose evidence without pretending PDF-4 normalized transaction rows are implemented.
+- Alternatives considered: Parse PDFs in Application, expose PdfPig types through the application boundary, normalize transactions during PDF-3, use QuestPDF for extraction, or wait until PDF-4 to exercise the committed PDFs.
+- Consequences: PdfPig remains replaceable behind the application interface, Application and Domain stay free of PdfPig references, QuestPDF remains fixture-generation only, and PDF-4 can build normalization from traced raw line evidence.
+- Status: Accepted.

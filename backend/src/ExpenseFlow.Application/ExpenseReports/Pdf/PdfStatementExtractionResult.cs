@@ -7,7 +7,8 @@ public sealed record PdfStatementExtractionResult(
     IReadOnlyCollection<PdfExtractedTransactionRow> ExtractedRows,
     IReadOnlyCollection<PdfInvalidExtractedRow> InvalidRows,
     IReadOnlyCollection<PdfExtractionWarning> Warnings,
-    IReadOnlyCollection<PdfExtractedStatementTotal> ExtractedStatementTotals)
+    IReadOnlyCollection<PdfExtractedStatementTotal> ExtractedStatementTotals,
+    IReadOnlyCollection<PdfExtractedTextLine> ExtractedLines)
 {
     public bool IsProcessable => Status is PdfExtractionStatus.Succeeded or PdfExtractionStatus.Partial;
 
@@ -29,6 +30,7 @@ public sealed record PdfStatementExtractionResult(
             Array.Empty<PdfExtractedTransactionRow>(),
             Array.Empty<PdfInvalidExtractedRow>(),
             warnings,
-            Array.Empty<PdfExtractedStatementTotal>());
+            Array.Empty<PdfExtractedStatementTotal>(),
+            Array.Empty<PdfExtractedTextLine>());
     }
 }

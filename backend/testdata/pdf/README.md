@@ -8,6 +8,8 @@ PDF-2.2 adds generated, text-selectable synthetic PDF binaries for the two accep
 
 QuestPDF is used only by the dedicated generator tool under `backend/tools/ExpenseFlow.SyntheticPdfGenerator/`. It is not a production extraction dependency.
 
+PDF-3 now uses these committed synthetic PDFs in deterministic raw text extraction tests. The tests verify that PdfPig can read the fixtures and preserve page/order/source traceability, but they do not define final PDF transaction normalization behavior.
+
 ## Variant IDs
 
 The first public synthetic fixture variants are:

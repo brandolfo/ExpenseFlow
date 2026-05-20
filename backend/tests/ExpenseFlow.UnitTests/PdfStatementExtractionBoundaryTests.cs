@@ -84,6 +84,7 @@ public sealed class PdfStatementExtractionBoundaryTests
             [SyntheticExtractedRow()],
             [invalidRow],
             [warning],
+            [],
             []);
 
         Assert.True(result.IsProcessable);
@@ -130,7 +131,8 @@ public sealed class PdfStatementExtractionBoundaryTests
                     "ARS",
                     SourcePage: 3,
                     EvidenceSnippet: "masked total evidence")
-            ]);
+            ],
+            []);
 
         var total = Assert.Single(result.ExtractedStatementTotals);
         Assert.Equal("TOTAL TITULAR", total.Label);
@@ -138,6 +140,25 @@ public sealed class PdfStatementExtractionBoundaryTests
         Assert.DoesNotContain(
             typeof(PdfStatementExtractionResult).GetProperties(),
             property => property.Name.Contains("ExpectedTotal", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void ExtractedTextLinesPreserveRawTraceabilityWithoutPdfLibraryTypes()
+    {
+        var line = new PdfExtractedTextLine(
+            "synthetic.pdf",
+            PdfStatementShapeIds.IcbcVisaLikeV1,
+            PdfStatementShapeIds.IcbcVisaLikeV1,
+            SourcePage: 1,
+            ExtractionOrder: 2,
+            Text: "FECHA COMPROBANTE DETALLE DE TRANSACCION PESOS DOLARES");
+
+        Assert.Equal("synthetic.pdf", line.SourceName);
+        Assert.Equal(PdfStatementShapeIds.IcbcVisaLikeV1, line.StatementShapeId);
+        Assert.Equal(PdfStatementShapeIds.IcbcVisaLikeV1, line.StatementShapeHint);
+        Assert.Equal(1, line.SourcePage);
+        Assert.Equal(2, line.ExtractionOrder);
+        Assert.Contains("DETALLE DE TRANSACCION", line.Text);
     }
 
     [Fact]
