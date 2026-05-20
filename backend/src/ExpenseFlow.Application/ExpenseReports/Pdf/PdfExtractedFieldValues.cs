@@ -7,4 +7,5 @@ public sealed record PdfExtractedFieldValues(
     string? Amount,
     string? Installment,
     string? SourceType,
-    string? Notes);
+    string? Notes,
+    string? CurrencyCode = null);

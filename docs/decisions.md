@@ -185,3 +185,10 @@
 - Alternatives considered: Parse PDFs in Application, expose PdfPig types through the application boundary, normalize transactions during PDF-3, use QuestPDF for extraction, or wait until PDF-4 to exercise the committed PDFs.
 - Consequences: PdfPig remains replaceable behind the application interface, Application and Domain stay free of PdfPig references, QuestPDF remains fixture-generation only, and PDF-4 can build normalization from traced raw line evidence.
 - Status: Accepted.
+
+### 2026-05-20 - Normalize supported synthetic PDF rows deterministically
+- Decision: PDF-4 uses an application-level `IPdfStatementRowNormalizer` with a deterministic implementation for `icbc-visa-like-v1` and `icbc-mastercard-like-v1`. It converts raw extracted text lines into normalized transaction-like extraction rows and invalid extracted rows using the committed expected normalized-row CSVs as the fixture source of truth.
+- Context: PDF-3 provides raw line evidence with page/order/source traceability, but PDF rows are not yet ready to feed the existing deterministic CSV processing pipeline. PDF-4 needs date, amount, currency, source-type hint, installment, warning, and evidence normalization without categorization, totals, report generation, endpoint work, OCR, LLM integration, persistence, or CSV behavior changes.
+- Alternatives considered: Normalize inside the PdfPig extractor, feed PDF rows into the expense report pipeline immediately, hard-code expected CSV files as production inputs, or defer invalid candidate handling until later.
+- Consequences: PdfPig remains isolated to Infrastructure, normalization remains testable in Application using library-free models, malformed transaction-like candidates remain visible as invalid extracted rows, and later PDF-5 integration can map normalized rows into the existing deterministic pipeline.
+- Status: Accepted.

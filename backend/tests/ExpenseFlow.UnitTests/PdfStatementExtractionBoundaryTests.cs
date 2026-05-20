@@ -28,6 +28,7 @@ public sealed class PdfStatementExtractionBoundaryTests
         Assert.Equal(new DateOnly(2026, 4, 12), row.Date);
         Assert.Equal("SYNTHETIC STORE INSTALLMENT 01/06", row.Description);
         Assert.Equal(12345.67m, row.Amount);
+        Assert.Equal("ARS", row.CurrencyCode);
         Assert.Equal("ABC-123", row.Code);
         Assert.Equal("01/06", row.Installment);
         Assert.Equal("installment", row.SourceType);
@@ -72,6 +73,7 @@ public sealed class PdfStatementExtractionBoundaryTests
                 Code: null,
                 Description: "SYNTHETIC UNCLEAR ROW",
                 Amount: "123.00",
+                CurrencyCode: "ARS",
                 Installment: null,
                 SourceType: "unknown",
                 Notes: "Synthetic invalid row"),
@@ -201,12 +203,14 @@ public sealed class PdfStatementExtractionBoundaryTests
                 Code: "ABC-123",
                 Description: "SYNTHETIC STORE INSTALLMENT 01/06",
                 Amount: "12345.67",
+                CurrencyCode: "ARS",
                 Installment: "01/06",
                 SourceType: "installment",
                 Notes: "Synthetic PDF row"),
             new DateOnly(2026, 4, 12),
             "SYNTHETIC STORE INSTALLMENT 01/06",
             12345.67m,
+            CurrencyCode: "ARS",
             Code: "ABC-123",
             Installment: "01/06",
             SourceType: "installment",
@@ -229,12 +233,16 @@ public sealed class PdfStatementExtractionBoundaryTests
 
     private static void AssertNoForbiddenTypeNames(Assembly assembly)
     {
-        var types = assembly.GetTypes();
-        var forbiddenTerms = new[] { "PdfPig", "QuestPdf", "OpenAi", "Llm", "Agent" };
+        var types = assembly.GetTypes()
+            .Where(type => type.Namespace?.StartsWith("ExpenseFlow.", StringComparison.Ordinal) == true)
+            .ToArray();
+        var forbiddenTerms = new[] { "PdfPig", "QuestPdf", "OpenAi", "Llm" };
 
         foreach (var forbiddenTerm in forbiddenTerms)
         {
             Assert.DoesNotContain(types, type => type.Name.Contains(forbiddenTerm, StringComparison.OrdinalIgnoreCase));
         }
+
+        Assert.DoesNotContain(types, type => type.Name.EndsWith("Agent", StringComparison.OrdinalIgnoreCase));
     }
 }

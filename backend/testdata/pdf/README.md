@@ -10,6 +10,8 @@ QuestPDF is used only by the dedicated generator tool under `backend/tools/Expen
 
 PDF-3 now uses these committed synthetic PDFs in deterministic raw text extraction tests. The tests verify that PdfPig can read the fixtures and preserve page/order/source traceability, but they do not define final PDF transaction normalization behavior.
 
+PDF-4 now uses the expected normalized-row CSVs as fixture-driven assertions for deterministic normalization from raw extracted lines into transaction-like extraction rows.
+
 ## Variant IDs
 
 The first public synthetic fixture variants are:
