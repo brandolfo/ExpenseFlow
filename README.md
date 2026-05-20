@@ -56,7 +56,7 @@ Implemented:
 - fixture-backed release gate
 - portfolio docs, demo script, API examples, interview pitch, and architecture summary
 
-Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually. The planned PDF statement ingestion phase is scoped in [docs/pdf-ingestion-plan.md](docs/pdf-ingestion-plan.md). PDF ingestion is being developed internally behind application services; no public PDF endpoint exists yet.
+Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually. The planned PDF statement ingestion phase is scoped in [docs/pdf-ingestion-plan.md](docs/pdf-ingestion-plan.md). A first deterministic PDF endpoint is now available for the committed synthetic text-selectable ICBC-like fixtures.
 
 ## Tech Stack
 
@@ -195,6 +195,17 @@ Invoke-RestMethod `
 ```
 
 See [docs/api-examples.md](docs/api-examples.md) for success, invalid-row, missing-header, missing-expected-total, and mismatch examples.
+
+## PDF API Endpoint
+
+```http
+POST http://localhost:5000/api/expense-reports/process-pdf
+Content-Type: application/json
+```
+
+The PDF endpoint accepts `sourceName`, optional `expectedTotal`, `pdfBase64`, and optional `statementShapeHint`. It currently supports only the synthetic text-selectable ICBC-like fixtures in `backend/testdata/pdf/`.
+
+It does not support OCR, LLM extraction, arbitrary bank/card PDFs, exchange-rate conversion, persistence, authentication, frontend workflows, Docker, or cloud deployment.
 
 ## Example Response Summary
 

@@ -199,3 +199,10 @@
 - Alternatives considered: Add a PDF HTTP endpoint immediately, create a separate PDF-specific financial report path, route PDFs through the CSV parser abstraction, silently drop unsupported-currency rows, or implement currency conversion during PDF-5.
 - Consequences: PDF ingestion can now be tested internally end-to-end while preserving the CSV baseline and architecture boundaries. USD rows remain visible as invalid/unprocessable rows until a later multi-currency decision is accepted. A public PDF endpoint remains deferred.
 - Status: Accepted.
+
+### 2026-05-20 - Expose deterministic PDF processing through a base64 JSON endpoint
+- Decision: PDF-6 exposes `POST /api/expense-reports/process-pdf` as a Minimal API endpoint that accepts `sourceName`, optional `expectedTotal`, `pdfBase64`, and optional `statementShapeHint`, enforces a 5 MB decoded PDF limit, and calls `IPdfExpenseReportProcessingService` for deterministic extraction, normalization, categorization, and report generation.
+- Context: PDF-5 proved the internal application service using synthetic fixtures. The first public PDF endpoint needs to make that workflow accessible while preserving the existing CSV endpoint, keeping endpoint logic thin, avoiding persistence, and keeping `expectedTotal` caller-provided.
+- Alternatives considered: Add multipart upload immediately, add extraction/reporting logic in the endpoint, store uploaded PDFs, trust extracted statement totals, add OCR or LLM extraction, or broaden support to arbitrary bank/card PDFs.
+- Consequences: Synthetic text-selectable ICBC-like PDFs can now be processed through HTTP with structured request validation and extraction metadata. Row-level extraction issues remain visible in `200 OK` reports, while request/file-level failures return `400 Bad Request`. OCR, LLMs, persistence, arbitrary PDF support, and advanced multi-currency behavior remain deferred.
+- Status: Accepted.

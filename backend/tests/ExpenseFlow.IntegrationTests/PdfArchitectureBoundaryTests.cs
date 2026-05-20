@@ -10,7 +10,7 @@ namespace ExpenseFlow.IntegrationTests;
 public sealed class PdfArchitectureBoundaryTests
 {
     [Fact]
-    public async Task ApiDoesNotExposePdfProcessingEndpointYet()
+    public async Task ApiExposesPdfProcessingEndpointForPdf6()
     {
         await using var factory = new WebApplicationFactory<Program>();
         using var client = factory.CreateClient();
@@ -23,7 +23,7 @@ public sealed class PdfArchitectureBoundaryTests
             statementShapeHint = "icbc-visa-like-v1"
         });
 
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.NotEqual(HttpStatusCode.NotFound, response.StatusCode);
     }
 
     [Fact]
@@ -87,6 +87,21 @@ public sealed class PdfArchitectureBoundaryTests
             var text = File.ReadAllText(Path.Combine(backendDirectory, projectFile));
 
             Assert.DoesNotContain("PdfPig", text, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    [Fact]
+    public void ApiSourceDoesNotReferencePdfPigTypesDirectly()
+    {
+        var apiDirectory = Path.Combine(GetBackendDirectory(), "src", "ExpenseFlow.Api");
+        var apiSourceFiles = Directory.EnumerateFiles(apiDirectory, "*.cs", SearchOption.AllDirectories);
+
+        foreach (var sourceFile in apiSourceFiles)
+        {
+            var text = File.ReadAllText(sourceFile);
+
+            Assert.DoesNotContain("PdfPig", text, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain("UglyToad", text, StringComparison.OrdinalIgnoreCase);
         }
     }
 

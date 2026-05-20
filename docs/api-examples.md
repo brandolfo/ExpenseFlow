@@ -216,3 +216,196 @@ Representative response snippet:
 ```
 
 AI is not used to reconcile the mismatch. The report exposes the rows and audit details needed for human review.
+
+## PDF Endpoint
+
+```http
+POST /api/expense-reports/process-pdf
+Content-Type: application/json
+```
+
+The PDF endpoint accepts a base64-encoded, text-selectable PDF and feeds it through the deterministic PDF ingestion pipeline. It currently supports only the committed synthetic ICBC-like fixtures:
+
+- `icbc-visa-like-v1`
+- `icbc-mastercard-like-v1`
+
+It does not support OCR, LLM extraction, arbitrary bank/card PDFs, persistence, authentication, frontend workflows, or exchange-rate conversion.
+
+## PDF Request Shape
+
+```json
+{
+  "sourceName": "icbc-visa-like-v1.synthetic.pdf",
+  "expectedTotal": 65521.95,
+  "pdfBase64": "JVBERi0xLjcK...shortened...",
+  "statementShapeHint": "icbc-visa-like-v1"
+}
+```
+
+Fields:
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `sourceName` | Yes | Used for report metadata and audit context. |
+| `expectedTotal` | No | Caller-provided total for deterministic validation. Extracted statement totals are not trusted validation input. |
+| `pdfBase64` | Yes | Base64-encoded PDF content. Decoded content must be 5 MB or smaller. |
+| `statementShapeHint` | No | Optional supported shape hint: `icbc-visa-like-v1` or `icbc-mastercard-like-v1`. |
+
+PowerShell example using the synthetic Visa-like fixture:
+
+```powershell
+$pdfBytes = [System.IO.File]::ReadAllBytes(".\backend\testdata\pdf\icbc-visa-like-v1.pdf")
+$body = @{
+  sourceName = "icbc-visa-like-v1.synthetic.pdf"
+  expectedTotal = 65521.95
+  pdfBase64 = [Convert]::ToBase64String($pdfBytes)
+  statementShapeHint = "icbc-visa-like-v1"
+} | ConvertTo-Json -Depth 5
+
+Invoke-RestMethod `
+  -Uri "http://localhost:5000/api/expense-reports/process-pdf" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+## PDF Successful Report
+
+Supported synthetic PDFs return `200 OK` when a deterministic report can be produced, even when some extracted rows are invalid, unprocessable, excluded, or require review.
+
+Representative response sections:
+
+```json
+{
+  "extractionMetadata": {
+    "sourceName": "icbc-visa-like-v1.synthetic.pdf",
+    "statementShapeId": "icbc-visa-like-v1",
+    "extractionStatus": "Partial",
+    "normalizedRowCount": 8,
+    "invalidExtractedRowCount": 1,
+    "unprocessableNormalizedRowCount": 1,
+    "sourceRowCount": 9,
+    "aiUsed": false
+  },
+  "extractionWarnings": [
+    {
+      "code": "missing_date_and_amount",
+      "message": "Transaction-like candidate is missing date and amount.",
+      "sourcePage": 1,
+      "extractionOrder": 9
+    }
+  ],
+  "report": {
+    "reportMetadata": {},
+    "processingCounts": {},
+    "totals": {},
+    "totalValidation": {},
+    "categorySummary": [],
+    "transactionDetails": [],
+    "reviewItems": [],
+    "invalidRows": [],
+    "excludedRows": [],
+    "auditSummary": {
+      "aiUsed": false
+    }
+  }
+}
+```
+
+Arrays and nested report sections are shortened here. The real response keeps every visible transaction, invalid row, review item, excluded row, and audit entry.
+
+## PDF Missing Required Fields With 400
+
+Request:
+
+```json
+{
+  "sourceName": "",
+  "expectedTotal": null,
+  "pdfBase64": null,
+  "statementShapeHint": "icbc-visa-like-v1"
+}
+```
+
+Expected response:
+
+```json
+{
+  "message": "PDF expense report request is invalid.",
+  "fileErrors": [
+    {
+      "code": "missing_source_name",
+      "message": "sourceName is required.",
+      "details": []
+    },
+    {
+      "code": "missing_pdf_base64",
+      "message": "pdfBase64 is required.",
+      "details": []
+    }
+  ]
+}
+```
+
+## PDF Invalid Base64 With 400
+
+Request:
+
+```json
+{
+  "sourceName": "statement.pdf",
+  "pdfBase64": "not base64",
+  "statementShapeHint": "icbc-visa-like-v1"
+}
+```
+
+Expected response:
+
+```json
+{
+  "message": "PDF expense report request is invalid.",
+  "fileErrors": [
+    {
+      "code": "invalid_pdf_base64",
+      "message": "pdfBase64 must be valid base64-encoded PDF content.",
+      "details": []
+    }
+  ]
+}
+```
+
+## PDF File Too Large With 400
+
+Decoded PDF content larger than 5 MB returns:
+
+```json
+{
+  "message": "PDF expense report request is invalid.",
+  "fileErrors": [
+    {
+      "code": "pdf_too_large",
+      "message": "Decoded PDF content exceeds the 5 MB limit.",
+      "details": ["maximumBytes=5242880"]
+    }
+  ]
+}
+```
+
+## Unsupported Or Malformed PDF With 400
+
+Unsupported shapes, empty content, encrypted PDFs, scanned/image-only PDFs, and malformed PDFs return structured file-level errors. Example malformed response:
+
+```json
+{
+  "message": "PDF input could not be processed.",
+  "fileErrors": [
+    {
+      "code": "pdf_extraction_failed",
+      "message": "PDF text extraction failed safely: PdfDocumentFormatException.",
+      "details": []
+    }
+  ]
+}
+```
+
+The endpoint does not expose raw PDF content or full extracted text by default.

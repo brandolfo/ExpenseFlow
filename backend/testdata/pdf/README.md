@@ -4,7 +4,7 @@ This folder is reserved for public synthetic PDF fixture assets for the PDF stat
 
 ## Current Status
 
-PDF-2.2 adds generated, text-selectable synthetic PDF binaries for the two accepted statement variants. The PDFs are fixture assets only; no PDF endpoint, OCR, LLM integration, private-data workflow, or report pipeline integration is implemented here.
+PDF-2.2 adds generated, text-selectable synthetic PDF binaries for the two accepted statement variants. The PDFs are synthetic fixture assets only; no OCR, LLM integration, private-data workflow, persistence, arbitrary PDF support, or production-hardening behavior is implemented here.
 
 QuestPDF is used only by the dedicated generator tool under `backend/tools/ExpenseFlow.SyntheticPdfGenerator/`. It is not a production extraction dependency.
 
@@ -12,7 +12,9 @@ PDF-3 now uses these committed synthetic PDFs in deterministic raw text extracti
 
 PDF-4 now uses the expected normalized-row CSVs as fixture-driven assertions for deterministic normalization from raw extracted lines into transaction-like extraction rows.
 
-PDF-5 now uses these synthetic fixtures in internal application service tests that feed normalized PDF rows into the existing deterministic categorization and report-generation pipeline. No public PDF endpoint exists yet.
+PDF-5 now uses these synthetic fixtures in internal application service tests that feed normalized PDF rows into the existing deterministic categorization and report-generation pipeline.
+
+PDF-6 now uses these synthetic fixtures in API integration tests for `POST /api/expense-reports/process-pdf`.
 
 ## Variant IDs
 

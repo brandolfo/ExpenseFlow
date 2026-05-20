@@ -5,6 +5,12 @@ public sealed record ProcessExpenseReportRequest(
     decimal? ExpectedTotal,
     string? CsvText);
 
+public sealed record ProcessPdfExpenseReportRequest(
+    string? SourceName,
+    decimal? ExpectedTotal,
+    string? PdfBase64,
+    string? StatementShapeHint);
+
 public sealed record ProcessExpenseReportResponse(
     ApiReportMetadata ReportMetadata,
     ApiProcessingCounts ProcessingCounts,
@@ -17,6 +23,11 @@ public sealed record ProcessExpenseReportResponse(
     IReadOnlyCollection<ApiExcludedRow> ExcludedRows,
     ApiAuditSummary AuditSummary);
 
+public sealed record ProcessPdfExpenseReportResponse(
+    ApiPdfExtractionMetadata ExtractionMetadata,
+    IReadOnlyCollection<ApiPdfExtractionWarning> ExtractionWarnings,
+    ProcessExpenseReportResponse Report);
+
 public sealed record ProcessExpenseReportErrorResponse(
     string Message,
     IReadOnlyCollection<ApiFileError> FileErrors);
@@ -25,6 +36,22 @@ public sealed record ApiFileError(
     string Code,
     string Message,
     IReadOnlyCollection<string> Details);
+
+public sealed record ApiPdfExtractionMetadata(
+    string SourceName,
+    string StatementShapeId,
+    string ExtractionStatus,
+    int NormalizedRowCount,
+    int InvalidExtractedRowCount,
+    int UnprocessableNormalizedRowCount,
+    int SourceRowCount,
+    bool AiUsed);
+
+public sealed record ApiPdfExtractionWarning(
+    string Code,
+    string Message,
+    int? SourcePage,
+    int? ExtractionOrder);
 
 public sealed record ApiReportMetadata(
     string Product,
