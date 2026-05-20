@@ -5,7 +5,7 @@ row_number,source_name,statement_shape,source_page,extraction_order,date,code,de
 4,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,1,4,2035-02-09,SMC-8104,SERVICIO DIGITAL TEST,7640.00,ARS,,automatic_debit,debitos automaticos subsection row,normalized,
 5,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,5,2035-02-11,SMC-8105,ELECTRO TEST 01/06,9500.00,ARS,01/06,installment,cuotas del mes installment pattern extracted from description,normalized,
 6,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,6,2035-02-12,SMC-8106,ELECTRO TEST 06/06,9500.00,ARS,06/06,installment,cuotas del mes final installment pattern extracted from description,normalized,
-7,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,7,2035-02-15,SMC-8107,DEVOLUCION TEST,-3200.00,ARS,,purchase,compras del mes subsection hint with negative credit-like amount visible,normalized,
+7,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,7,2035-02-15,SMC-8107,DEVOLUCION TEST,-3200.00,ARS,,refund,compras del mes subsection hint with negative credit-like amount visible,normalized,
 8,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,8,2035-02-18,SMC-8108,IMPUESTO SINTETICO,540.75,ARS,,purchase,compras del mes subsection hint with fee or tax-like description,normalized,
 9,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,9,2035-02-20,SMC-8109,SERVICIO GLOBAL DEMO,18.25,USD,,purchase,amount came from DOLARES column and remains foreign-currency evidence,normalized,
 10,icbc-mastercard-like-v1.synthetic.pdf,icbc-mastercard-like-v1,2,10,,SMC-8110,LINEA INCOMPLETA TEST,,ARS,,unknown,transaction-like candidate with missing date and amount,invalid,missing_date_and_amount

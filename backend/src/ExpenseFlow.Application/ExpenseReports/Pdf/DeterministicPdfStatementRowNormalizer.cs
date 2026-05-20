@@ -202,7 +202,7 @@ public sealed partial class DeterministicPdfStatementRowNormalizer : IPdfStateme
             var code = match.Groups["code"].Value;
             var rawAmount = NullIfWhiteSpace(match.Groups["amount"].Value);
             var currency = code == "SMC-8109" ? "USD" : "ARS";
-            var sourceType = string.IsNullOrWhiteSpace(currentSourceType) ? "unknown" : currentSourceType;
+            var sourceType = ResolveMastercardSourceType(description, currentSourceType);
             var installment = InstallmentRegex().Match(description);
             var installmentValue = installment.Success ? installment.Value : null;
             var notes = ResolveMastercardNotes(description, sourceType, currency);
@@ -532,6 +532,16 @@ public sealed partial class DeterministicPdfStatementRowNormalizer : IPdfStateme
         }
 
         return "purchase";
+    }
+
+    private static string ResolveMastercardSourceType(string description, string currentSourceType)
+    {
+        if (description.Contains("DEVOLUCION", StringComparison.OrdinalIgnoreCase))
+        {
+            return "refund";
+        }
+
+        return string.IsNullOrWhiteSpace(currentSourceType) ? "unknown" : currentSourceType;
     }
 
     private static string ResolveVisaNotes(string description, string currency, string sourceType)

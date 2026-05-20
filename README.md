@@ -56,7 +56,7 @@ Implemented:
 - fixture-backed release gate
 - portfolio docs, demo script, API examples, interview pitch, and architecture summary
 
-Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually. The planned PDF statement ingestion phase is scoped in [docs/pdf-ingestion-plan.md](docs/pdf-ingestion-plan.md).
+Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually. The planned PDF statement ingestion phase is scoped in [docs/pdf-ingestion-plan.md](docs/pdf-ingestion-plan.md). PDF ingestion is being developed internally behind application services; no public PDF endpoint exists yet.
 
 ## Tech Stack
 

@@ -12,6 +12,8 @@ PDF-3 now uses these committed synthetic PDFs in deterministic raw text extracti
 
 PDF-4 now uses the expected normalized-row CSVs as fixture-driven assertions for deterministic normalization from raw extracted lines into transaction-like extraction rows.
 
+PDF-5 now uses these synthetic fixtures in internal application service tests that feed normalized PDF rows into the existing deterministic categorization and report-generation pipeline. No public PDF endpoint exists yet.
+
 ## Variant IDs
 
 The first public synthetic fixture variants are:

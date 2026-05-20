@@ -11,5 +11,6 @@ public enum ReviewReason
     PotentialDuplicate,
     MissingDescription,
     InvalidDate,
-    InvalidAmount
+    InvalidAmount,
+    UnsupportedCurrency
 }

@@ -192,3 +192,10 @@
 - Alternatives considered: Normalize inside the PdfPig extractor, feed PDF rows into the expense report pipeline immediately, hard-code expected CSV files as production inputs, or defer invalid candidate handling until later.
 - Consequences: PdfPig remains isolated to Infrastructure, normalization remains testable in Application using library-free models, malformed transaction-like candidates remain visible as invalid extracted rows, and later PDF-5 integration can map normalized rows into the existing deterministic pipeline.
 - Status: Accepted.
+
+### 2026-05-20 - Integrate PDF rows through an internal deterministic application service
+- Decision: PDF-5 adds `IPdfExpenseReportProcessingService` and `DeterministicPdfExpenseReportProcessingService` in Application. The service extracts PDF text through `IPdfStatementExtractor`, normalizes rows through `IPdfStatementRowNormalizer`, converts processable ARS rows into existing parsed transaction candidates, carries invalid/unprocessable PDF rows into existing invalid-row report visibility, and reuses the existing deterministic categorization and report generator before any public PDF endpoint exists.
+- Context: The PDF phase requires normalized PDF rows to feed the current deterministic reporting pipeline without changing CSV behavior, trusting extracted statement totals, adding OCR/LLM/external APIs, or leaking PdfPig/QuestPDF into Application or Domain. The current report model is ARS-focused and has no accepted exchange-rate policy.
+- Alternatives considered: Add a PDF HTTP endpoint immediately, create a separate PDF-specific financial report path, route PDFs through the CSV parser abstraction, silently drop unsupported-currency rows, or implement currency conversion during PDF-5.
+- Consequences: PDF ingestion can now be tested internally end-to-end while preserving the CSV baseline and architecture boundaries. USD rows remain visible as invalid/unprocessable rows until a later multi-currency decision is accepted. A public PDF endpoint remains deferred.
+- Status: Accepted.
