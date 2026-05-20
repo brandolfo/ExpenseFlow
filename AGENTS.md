@@ -9,6 +9,10 @@ Do not build a generic CRUD app. Every decision should support the core product 
 ## Collaboration model
 Codex acts as the coding and project assistant. It can use the role definitions in /agents when asked to reason from a specific perspective.
 
+Role agents are repo-local planning and review lenses only. They are not runtime application agents, and ExpenseFlow should not claim or implement a runtime multi-agent architecture unless a separate future decision explicitly accepts that scope.
+
+Future Codex prompts should follow `docs/codex-prompting-standard.md`, especially for source-of-truth priority, decision authority, expected diff, forbidden diff, blocker protocol, self-review, and stop condition guidance.
+
 Available role agents:
 - Founder Agent
 - Product Manager Agent
@@ -79,15 +83,28 @@ When implementation begins:
 - Design for observability and auditability.
 
 ## Agent usage rules
-- Use Product Manager Agent to define PDF phase scope and non-goals before implementation.
-- Use Document Extraction Agent and Data Engineer Agent for PDF statement structure, extraction assumptions, normalization, and source traceability.
-- Use Domain Expert Agent to decide transaction semantics after extraction, not document parsing mechanics.
-- Use Backend Architect Agent to keep PDF ingestion behind replaceable application/infrastructure boundaries.
-- Use QA Agent to define fixture, extraction, normalization, and no-silent-row-loss tests.
-- Use Security Agent before any real statement, external API, local file storage, or AI provider is introduced.
-- Use AI Architect Agent only after deterministic PDF extraction and review boundaries are clear.
-- Use Technical Writer Agent to keep docs aligned with implemented behavior and future plans.
-- Avoid multi-agent review for mechanical edits, formatting, dependency bumps, or straightforward test fixes.
+- Use role agents only when the lens materially reduces product, architecture, QA, security, documentation, AI-boundary, or scope risk.
+- Use Product Manager Agent and Founder Agent to define feature scope, non-goals, MVP-vs-future boundaries, and portfolio value before new product behavior is added.
+- Use Backend Architect Agent to review module boundaries, endpoint shape, deterministic processing boundaries, infrastructure isolation, and overengineering risk.
+- Use QA Agent to define release gates, regression coverage, fixture behavior, no-silent-row-loss checks, and failure modes.
+- Use Security Agent before any real/private statement experiment, external API, local file storage, retention policy, AI provider, secrets handling, or deployment work.
+- Use Technical Writer Agent to keep README, architecture docs, decision logs, API examples, and future prompts aligned with implemented behavior and `docs/codex-prompting-standard.md`.
+- Use DevOps Agent for CI/release gate automation, reproducible local commands, health checks, environment handling, and observability planning; do not add Docker/cloud/deployment scope unless explicitly accepted.
+- Use Document Extraction Agent and Data Engineer Agent for future PDF variants, extraction hardening, private local PDF experiments, normalization, source traceability, and data quality risks.
+- Use Domain Expert Agent to decide transaction semantics after extraction or parsing, not document parsing mechanics.
+- Use AI Architect Agent only for future AI-assisted review, structured outputs, guardrails, confidence behavior, provider boundaries, and failure handling; do not use it to add runtime agents or AI to deterministic totals/validation.
+- Use UX Researcher Agent when user workflow, trust, review, or manual correction needs are unclear.
+- Use Marketing Agent for portfolio, CV, LinkedIn, and interview positioning after implemented behavior is known.
+- Align role-agent work with relevant repo-local skills when they fit the task; avoid skill or multi-agent ceremony for mechanical edits, formatting, dependency bumps, or straightforward test fixes.
+
+## Skill usage rules
+- Use Product Discovery Skill with Founder Agent or Product Manager Agent for new feature scope, non-goals, assumptions, and acceptance criteria.
+- Use Backend Architecture Review Skill with Backend Architect Agent for module boundaries, endpoints, infrastructure isolation, maintainability, and testability.
+- Use Test Case Generation Skill with QA Agent for release gates, edge cases, fixture coverage, failure modes, and regression risks.
+- Use Expense Domain Analysis Skill with Domain Expert Agent for categorization, transaction semantics, refunds, duplicates, totals, and review behavior.
+- Use PDF Statement Ingestion Skill with Document Extraction Agent and Data Engineer Agent for future PDF variants, traceability, privacy, extraction, and normalization work.
+- Use Portfolio Positioning Skill with Technical Writer Agent or Marketing Agent for README, demos, interview explanations, and public project positioning.
+- Use AI Agent Design Skill with AI Architect Agent only for future AI-assisted review/suggestion boundaries; do not use it to design runtime application agents.
 
 ## Documentation rules
 Every major decision should be recorded in /docs/decisions.md with:
