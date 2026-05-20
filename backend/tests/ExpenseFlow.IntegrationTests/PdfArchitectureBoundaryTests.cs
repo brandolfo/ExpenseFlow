@@ -140,6 +140,36 @@ public sealed class PdfArchitectureBoundaryTests
         }
     }
 
+    [Fact]
+    public void PdfTestdataContainsOnlyApprovedSyntheticPublicAssets()
+    {
+        var pdfFixtureDirectory = Path.Combine(GetBackendDirectory(), "testdata", "pdf");
+        var approvedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "README.md",
+            "icbc-visa-like-v1.fixture-spec.md",
+            "icbc-visa-like-v1.expected-normalized-rows.csv",
+            "icbc-visa-like-v1.pdf",
+            "icbc-mastercard-like-v1.fixture-spec.md",
+            "icbc-mastercard-like-v1.expected-normalized-rows.csv",
+            "icbc-mastercard-like-v1.pdf"
+        };
+
+        var actualFiles = Directory.EnumerateFiles(pdfFixtureDirectory, "*", SearchOption.AllDirectories)
+            .Select(path => Path.GetRelativePath(pdfFixtureDirectory, path).Replace('\\', '/'))
+            .Order(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
+        Assert.Equal(approvedFiles.Order(StringComparer.OrdinalIgnoreCase), actualFiles);
+        Assert.DoesNotContain(actualFiles, path => path.Contains("private", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(actualFiles, path => path.Contains("real", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(actualFiles, path => path.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(actualFiles, path => path.EndsWith(".txt", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(actualFiles, path => path.EndsWith(".png", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(actualFiles, path => path.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase));
+        Assert.DoesNotContain(actualFiles, path => path.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase));
+    }
+
     private static string GetBackendDirectory() =>
         Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
 }

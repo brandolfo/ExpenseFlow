@@ -132,7 +132,7 @@ Future AI can help with review-required rows, summaries, or rule recommendations
 ## Five-Minute Demo Flow
 
 1. Explain the problem: exported transactions are structured, but still messy and hard to audit manually.
-2. Show the architecture briefly: API calls Application; Domain has statuses/categories/report concepts; Infrastructure owns CsvHelper.
+2. Show the architecture briefly: API calls Application; Domain has statuses/categories/report concepts; Infrastructure owns CsvHelper and PdfPig adapters.
 3. Run the test suite and call out unit plus integration coverage.
 4. Start the API and send the main fixture.
 5. Walk through parsing: required headers, optional fields, raw values, source row numbers.
@@ -141,3 +141,51 @@ Future AI can help with review-required rows, summaries, or rule recommendations
 8. Walk through totals: processed total, trusted category total, expected total validation.
 9. Walk through audit: rule IDs, review reasons, invalid row errors, no AI used.
 10. Explain future direction: manual corrections, persistence, exports, and later AI suggestions only for already review-required rows.
+
+## PDF Demo Flow
+
+The PDF demo uses only committed synthetic fixtures:
+
+- `backend/testdata/pdf/icbc-visa-like-v1.pdf`
+- `backend/testdata/pdf/icbc-mastercard-like-v1.pdf`
+
+Run the API:
+
+```powershell
+cd backend
+dotnet run --project src/ExpenseFlow.Api
+```
+
+Send a synthetic PDF request from a second terminal at the repository root:
+
+```powershell
+$pdfBytes = [System.IO.File]::ReadAllBytes(".\backend\testdata\pdf\icbc-visa-like-v1.pdf")
+$body = @{
+  sourceName = "icbc-visa-like-v1.synthetic.pdf"
+  expectedTotal = 65521.95
+  pdfBase64 = [Convert]::ToBase64String($pdfBytes)
+  statementShapeHint = "icbc-visa-like-v1"
+} | ConvertTo-Json -Depth 5
+
+Invoke-RestMethod `
+  -Uri "http://localhost:5000/api/expense-reports/process-pdf" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+What to point out:
+
+- The API accepts base64 JSON, not a persisted upload.
+- PdfPig extracts text in Infrastructure.
+- The PDF normalizer maps supported statement rows into the same conceptual transaction fields used by the CSV pipeline.
+- The existing categorization, review, totals, expected-total validation, and reporting logic is reused.
+- Non-ARS rows stay visible as unsupported rows and do not affect ARS totals.
+- Malformed transaction-like candidates stay visible as invalid rows.
+- `aiUsed` remains `false`; OCR and LLM extraction are deliberately not used.
+- Real PDFs must remain local/private and must not be committed.
+
+Honest limitations:
+
+- Only the two synthetic text-selectable ICBC-like variants are supported.
+- Arbitrary bank/card PDFs, scanned statements, OCR, exchange-rate conversion, trusted statement-total extraction, persistence, auth, frontend, Docker, and cloud deployment are out of scope.

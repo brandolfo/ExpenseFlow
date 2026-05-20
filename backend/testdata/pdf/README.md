@@ -4,17 +4,17 @@ This folder is reserved for public synthetic PDF fixture assets for the PDF stat
 
 ## Current Status
 
-PDF-2.2 adds generated, text-selectable synthetic PDF binaries for the two accepted statement variants. The PDFs are synthetic fixture assets only; no OCR, LLM integration, private-data workflow, persistence, arbitrary PDF support, or production-hardening behavior is implemented here.
+The PDF ingestion phase is implemented for the two accepted synthetic text-selectable statement variants. The PDFs are synthetic fixture assets only; no OCR, LLM integration, private-data workflow, persistence, arbitrary PDF support, trusted statement-total extraction, exchange-rate conversion, or production-hardening behavior is implemented here.
 
 QuestPDF is used only by the dedicated generator tool under `backend/tools/ExpenseFlow.SyntheticPdfGenerator/`. It is not a production extraction dependency.
 
-PDF-3 now uses these committed synthetic PDFs in deterministic raw text extraction tests. The tests verify that PdfPig can read the fixtures and preserve page/order/source traceability, but they do not define final PDF transaction normalization behavior.
+The fixtures support:
 
-PDF-4 now uses the expected normalized-row CSVs as fixture-driven assertions for deterministic normalization from raw extracted lines into transaction-like extraction rows.
-
-PDF-5 now uses these synthetic fixtures in internal application service tests that feed normalized PDF rows into the existing deterministic categorization and report-generation pipeline.
-
-PDF-6 now uses these synthetic fixtures in API integration tests for `POST /api/expense-reports/process-pdf`.
+- deterministic PdfPig raw text extraction tests
+- PDF row normalization tests against expected normalized rows
+- internal PDF processing service tests
+- API integration tests for `POST /api/expense-reports/process-pdf`
+- no-silent-row-loss, non-ARS visibility, and dependency-boundary release-gate checks
 
 ## Variant IDs
 
@@ -32,9 +32,9 @@ The first public synthetic fixture variants are:
 - `icbc-mastercard-like-v1.expected-normalized-rows.csv`: expected extraction and normalization rows for the Mastercard-like variant.
 - `icbc-mastercard-like-v1.pdf`: generated text-selectable synthetic Mastercard-like fixture.
 
-The CSV files are the source of truth for expected extraction and normalization results. The generated PDFs visually contain those rows so future extraction tests can compare extracted output against the expected normalized-row CSVs.
+The CSV files are the source of truth for expected extraction and normalization results. The generated PDFs visually contain those rows so extraction and normalization tests can compare extracted output against the expected normalized-row CSVs.
 
-The CSV files and PDFs describe extraction/normalization expectations only. They do not define final categories, processed totals, expected-total validation, or report output.
+The CSV files and PDFs describe extraction/normalization expectations only. Final categories, processed totals, expected-total validation, and report output are produced by the existing deterministic processing pipeline and guarded by service/API tests.
 
 ## Synthetic-Only Rule
 
@@ -68,4 +68,4 @@ The generator reads the expected normalized-row CSVs and writes the PDF fixture 
 
 Generated PDFs are safe to commit only because they are fully synthetic. Real PDFs remain forbidden here, including anonymized real statements, screenshots, extracted text, and private statement metadata.
 
-These fixture assets will support PDF-3/PDF-4 tests for statement-shape detection, active-section markers, row extraction order, page traceability, header/footer exclusion, sign handling, malformed candidate visibility, and no silent row loss.
+These fixture assets support tests for statement-shape detection, active-section markers, row extraction order, page traceability, header/footer exclusion, sign handling, malformed candidate visibility, non-ARS visibility, API processing, and no silent row loss.

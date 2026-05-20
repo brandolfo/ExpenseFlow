@@ -2,7 +2,7 @@
 
 ## 30-Second Pitch
 
-ExpenseFlow is a backend-focused expense processing project built with ASP.NET Core and .NET. It takes a messy but structured CSV expense export, validates every row, categorizes known merchants with deterministic rules, flags ambiguous or unsafe rows for review, calculates totals in code, validates against an expected total, and returns an auditable JSON report. The MVP deliberately avoids AI, persistence, auth, and frontend work so the first slice proves trustworthy backend processing.
+ExpenseFlow is a backend-focused expense processing project built with ASP.NET Core and .NET. It takes a messy but structured CSV expense export, or a supported synthetic text-selectable PDF fixture, validates every row, categorizes known merchants with deterministic rules, flags ambiguous or unsafe rows for review, calculates totals in code, validates against a caller-provided expected total, and returns an auditable JSON report. The implemented release deliberately avoids AI, OCR, persistence, auth, and frontend work so it proves trustworthy backend processing first.
 
 ## Two-Minute Technical Explanation
 
@@ -14,6 +14,18 @@ The report generator calculates processed totals and trusted category totals det
 
 The release gate is covered by unit and integration tests using committed synthetic fixtures. The important proof is that no source row is silently dropped and no AI is used for financial correctness.
 
+## PDF Phase Talking Points
+
+- PDF ingestion extends the CSV MVP without creating a parallel financial pipeline.
+- The PDF endpoint is `POST /api/expense-reports/process-pdf`.
+- Supported variants are `icbc-visa-like-v1` and `icbc-mastercard-like-v1`.
+- PdfPig is isolated to Infrastructure behind an application-facing extractor boundary.
+- QuestPDF is used only by the synthetic fixture generator tool.
+- Extraction and normalization are deterministic and fixture-backed.
+- Non-ARS rows remain visible as unsupported rows and do not affect ARS totals.
+- LLM and OCR support are deliberately deferred.
+- Real PDF data is not committed; public fixtures are fully synthetic.
+
 ## Backend Skills Demonstrated
 
 - ASP.NET Core Minimal API design
@@ -22,6 +34,8 @@ The release gate is covered by unit and integration tests using committed synthe
 - application orchestration outside HTTP handlers
 - domain modeling for statuses, categories, validation, reports, and audit
 - Infrastructure adapter for CSV parsing with CsvHelper
+- Infrastructure adapter for text-selectable PDF extraction with PdfPig
+- deterministic PDF normalization into the existing reporting pipeline
 - deterministic rule evaluation
 - row-level validation and file-level validation
 - total calculation with decimal values
@@ -47,7 +61,7 @@ Domain models transaction statuses, categories, report totals, validation status
 
 Infrastructure is replaceable:
 
-CsvHelper is isolated in `ExpenseFlow.Infrastructure`. Future file parsers can be added behind the same application-facing parser boundary.
+CsvHelper and PdfPig are isolated in `ExpenseFlow.Infrastructure`. QuestPDF is isolated to the synthetic fixture generator tool. Future file parsers can be added behind application-facing boundaries.
 
 AI is future-ready, not MVP behavior:
 
@@ -82,7 +96,8 @@ This avoids silently treating non-spending movements as ordinary expenses. Futur
 - authentication or user accounts
 - frontend dashboard
 - Docker or cloud deployment
-- PDF parsing
+- arbitrary bank/card PDF parsing
+- OCR
 - Excel parsing
 - multipart upload
 - manual correction workflow
@@ -133,4 +148,4 @@ Because the first trust boundary is deterministic. Unknown or ambiguous rows sho
 
 ### What would you improve next?
 
-I would add a manual correction workflow with persisted correction history, then use repeated corrections to suggest new deterministic rules. After that, AI suggestions could be added for review-required rows behind a clear application boundary.
+I would add a manual correction workflow with persisted correction history, then use repeated corrections to suggest new deterministic rules. For PDFs, I would add new variants only after creating synthetic fixtures and tests. After that, AI suggestions could be added for review-required rows behind a clear application boundary.

@@ -206,3 +206,10 @@
 - Alternatives considered: Add multipart upload immediately, add extraction/reporting logic in the endpoint, store uploaded PDFs, trust extracted statement totals, add OCR or LLM extraction, or broaden support to arbitrary bank/card PDFs.
 - Consequences: Synthetic text-selectable ICBC-like PDFs can now be processed through HTTP with structured request validation and extraction metadata. Row-level extraction issues remain visible in `200 OK` reports, while request/file-level failures return `400 Bad Request`. OCR, LLMs, persistence, arbitrary PDF support, and advanced multi-currency behavior remain deferred.
 - Status: Accepted.
+
+### 2026-05-20 - Complete PDF phase for synthetic ICBC-like fixtures
+- Decision: PDF-7 treats the PDF ingestion phase as complete for the two committed synthetic text-selectable ICBC-like variants, guarded by fixture-backed extraction, normalization, internal service, API, no-silent-row-loss, CSV regression, fixture hygiene, and dependency-boundary tests.
+- Context: PDF-6 exposed the public PDF endpoint after deterministic extraction, normalization, and service integration were in place. The phase now needs a clear release gate and portfolio documentation without expanding into arbitrary PDF support or private-data workflows.
+- Alternatives considered: Keep the phase open until arbitrary bank/card PDFs work, add OCR or LLM extraction, trust extracted statement totals, add exchange-rate conversion, add persistence/auth/frontend/Docker, or rely only on documentation instead of executable release-gate tests.
+- Consequences: The repository can present PDF ingestion as implemented for the scoped synthetic fixtures while staying honest about limitations. PdfPig remains Infrastructure-only, QuestPDF remains fixture-generation only, CSV behavior remains protected, non-ARS rows remain visible and excluded from ARS totals, and future OCR/LLM/arbitrary-PDF/private-data work still requires separate decisions.
+- Status: Accepted.

@@ -117,6 +117,52 @@ public sealed class ProcessPdfExpenseReportEndpointTests
         Assert.Equal(65521.95m, GetDecimal(report, "totals", "processedTotal"));
     }
 
+    [Theory]
+    [InlineData(
+        "icbc-visa-like-v1.pdf",
+        "icbc-visa-like-v1.synthetic.pdf",
+        PdfStatementShapeIds.IcbcVisaLikeV1,
+        65521.95,
+        9,
+        "SVI-9108",
+        "SVI-9109")]
+    [InlineData(
+        "icbc-mastercard-like-v1.pdf",
+        "icbc-mastercard-like-v1.synthetic.pdf",
+        PdfStatementShapeIds.IcbcMastercardLikeV1,
+        55812.00,
+        10,
+        "SMC-8109",
+        "SMC-8110")]
+    public async Task SupportedPdfFixturesAccountForEveryNormalizedRowThroughApi(
+        string fixtureFileName,
+        string sourceName,
+        string statementShapeHint,
+        decimal expectedTotal,
+        int expectedSourceRows,
+        string unsupportedCurrencyCode,
+        string malformedCandidateCode)
+    {
+        using var response = await PostFixtureAsync(fixtureFileName, sourceName, expectedTotal, statementShapeHint);
+        using var json = await ReadJsonAsync(response);
+        var report = json.RootElement.GetProperty("report");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(
+            Enumerable.Range(1, expectedSourceRows),
+            report.GetProperty("transactionDetails").EnumerateArray().Select(row => row.GetProperty("sourceRow").GetInt32()));
+        Assert.Contains(
+            report.GetProperty("invalidRows").EnumerateArray(),
+            item => item.GetProperty("rawValues").GetProperty("code").GetString() == unsupportedCurrencyCode &&
+                item.GetProperty("includedInProcessedTotal").GetBoolean() == false &&
+                item.GetProperty("includedInCategoryTotals").GetBoolean() == false);
+        Assert.Contains(
+            report.GetProperty("invalidRows").EnumerateArray(),
+            item => item.GetProperty("rawValues").GetProperty("code").GetString() == malformedCandidateCode &&
+                item.GetProperty("includedInProcessedTotal").GetBoolean() == false &&
+                item.GetProperty("includedInCategoryTotals").GetBoolean() == false);
+    }
+
     [Fact]
     public async Task PdfEndpointDoesNotRequireAuthenticationOrExternalServices()
     {

@@ -1,15 +1,15 @@
 # ExpenseFlow API Examples
 
-## Endpoint
+## CSV Endpoint
 
 ```http
 POST /api/expense-reports/process
 Content-Type: application/json
 ```
 
-The first API accepts raw CSV text in JSON. It does not accept multipart uploads in the MVP.
+The CSV API accepts raw CSV text in JSON. It does not accept multipart uploads in the implemented release.
 
-## Request Shape
+## CSV Request Shape
 
 ```json
 {
@@ -29,7 +29,7 @@ Fields:
 
 Full fixtures live in `backend/testdata/`.
 
-## Successful Report
+## CSV Successful Report
 
 Representative request:
 
@@ -393,7 +393,34 @@ Decoded PDF content larger than 5 MB returns:
 
 ## Unsupported Or Malformed PDF With 400
 
-Unsupported shapes, empty content, encrypted PDFs, scanned/image-only PDFs, and malformed PDFs return structured file-level errors. Example malformed response:
+Unsupported shapes, empty content, encrypted PDFs, scanned/image-only PDFs, and malformed PDFs return structured file-level errors. The endpoint does not try OCR, LLM extraction, arbitrary bank/card parsing, or external APIs.
+
+Unsupported shape hint:
+
+```json
+{
+  "sourceName": "statement.pdf",
+  "pdfBase64": "JVBERi0xLjcK...shortened...",
+  "statementShapeHint": "unsupported-shape"
+}
+```
+
+Expected response:
+
+```json
+{
+  "message": "PDF expense report request is invalid.",
+  "fileErrors": [
+    {
+      "code": "unsupported_statement_shape_hint",
+      "message": "statementShapeHint must be one of the supported synthetic statement shapes.",
+      "details": ["icbc-visa-like-v1", "icbc-mastercard-like-v1"]
+    }
+  ]
+}
+```
+
+Example malformed response:
 
 ```json
 {

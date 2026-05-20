@@ -2,14 +2,14 @@
 
 ## Purpose
 
-This spec defines the synthetic statement data contract for the future public Visa-like PDF fixture. It is a fixture specification only; PDF-2.1 does not create an actual PDF binary or implement PDF parsing.
+This spec defines the synthetic statement data contract for the public Visa-like PDF fixture. It is implemented by the generated text-selectable PDF `icbc-visa-like-v1.pdf`.
 
-The CSV file `icbc-visa-like-v1.expected-normalized-rows.csv` is the source of truth for expected extraction results. A future generated PDF should visually contain the rows described here, and future extraction tests should compare extracted rows against that CSV.
+The CSV file `icbc-visa-like-v1.expected-normalized-rows.csv` is the source of truth for expected extraction results. The generated PDF visually contains the rows described here, and extraction/normalization tests compare extracted rows against that CSV.
 
 ## Fixture Identity
 
 - Variant id: `icbc-visa-like-v1`
-- Future source name: `icbc-visa-like-v1.synthetic.pdf`
+- Source name used in tests/API examples: `icbc-visa-like-v1.synthetic.pdf`
 - Source type: synthetic text-selectable credit card statement
 - Page count: single-page for first extraction
 - Data policy: synthetic public data only
@@ -30,7 +30,7 @@ No real names, card/account numbers, addresses, statement numbers, tax IDs, emai
 
 ## Conceptual Layout
 
-The future PDF should contain one transaction table on page 1 with these conceptual columns:
+The generated PDF contains one transaction table on page 1 with these conceptual columns:
 
 - `FECHA`
 - `COMPROBANTE`
@@ -55,7 +55,7 @@ Rows after the first stop marker are summary/footer content and must not become 
 
 ## Date And Amount Rules
 
-- Source date format in the future PDF: `dd.MM.yy`
+- Source date format in the generated PDF: `dd.MM.yy`
 - Expected normalized date format in CSV expectations: `yyyy-MM-dd`
 - `COMPROBANTE` maps to normalized `code`.
 - Pesos amounts map to normalized `amount` with `currency` set to `ARS`.
@@ -65,7 +65,7 @@ Rows after the first stop marker are summary/footer content and must not become 
 
 ## Synthetic Rows To Include
 
-The future PDF should visually contain these invented rows in table order:
+The generated PDF visually contains these invented rows in table order:
 
 | Source date | Comprobante | Detail | Pesos | Dolares | Expected purpose |
 | --- | --- | --- | ---: | ---: | --- |
@@ -98,10 +98,9 @@ This fixture is fully synthetic. It imitates only structural patterns of the tar
 
 ## Non-Goals
 
-- No actual PDF binary in PDF-2.1.
-- No PDF parsing implementation.
-- No PdfPig or QuestPDF dependency.
 - No OCR fixture.
 - No LLM fixture.
 - No category expectations.
 - No processed total or expected-total validation expectations.
+- No arbitrary bank/card PDF support.
+- No trusted statement-total extraction.

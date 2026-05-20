@@ -4,13 +4,19 @@
 
 This is the short, public-friendly architecture summary for the implemented MVP. The detailed design remains in `docs/backend-architecture.md`.
 
-ExpenseFlow is a modular monolith built around one backend workflow:
+ExpenseFlow is a modular monolith built around one backend file-to-report workflow:
 
 ```text
 CSV input -> parsing -> validation -> deterministic categorization -> totals/reporting -> API response
 ```
 
-The architecture is intentionally simple. It proves the processing workflow without adding persistence, authentication, frontend, Docker, cloud infrastructure, PDF/Excel parsing, background jobs, or AI integration.
+The implemented PDF phase adds a second source-ingestion path without creating a second financial pipeline:
+
+```text
+synthetic PDF fixture -> PdfPig extraction -> PDF row normalization -> existing deterministic processing pipeline -> PDF API response
+```
+
+The architecture is intentionally simple. It proves the processing workflow without adding persistence, authentication, frontend, Docker, cloud infrastructure, Excel parsing, OCR, LLM integration, background jobs, or external APIs.
 
 ## Project Boundaries
 
@@ -25,7 +31,7 @@ ExpenseFlow.Domain
   transaction states, categories, validation concepts, report totals, audit concepts
 
 ExpenseFlow.Infrastructure
-  CsvHelper parser implementation behind the application parser abstraction
+  CsvHelper parser implementation and PdfPig PDF extractor behind application abstractions
 ```
 
 ## Data Flow
@@ -39,6 +45,27 @@ ExpenseFlow.Infrastructure
 7. Categorization marks rows as categorized, review-required, excluded from totals, or potential duplicates.
 8. Report generation calculates processed totals, trusted category totals, expected-total validation, processing counts, review items, excluded rows, invalid rows, and audit summary.
 9. `ExpenseFlow.Api` maps the report to explicit API DTOs and returns JSON.
+
+## PDF Ingestion Architecture
+
+The PDF endpoint follows this path:
+
+1. `ExpenseFlow.Api` receives `sourceName`, optional `expectedTotal`, `pdfBase64`, and optional `statementShapeHint`.
+2. The endpoint validates request shape, supported hint values, valid base64, and the 5 MB decoded PDF limit.
+3. `ExpenseFlow.Application` calls `IPdfExpenseReportProcessingService`.
+4. `ExpenseFlow.Infrastructure` uses PdfPig inside `PdfPigPdfStatementExtractor` to extract text from text-selectable PDFs.
+5. `DeterministicPdfStatementRowNormalizer` supports only `icbc-visa-like-v1` and `icbc-mastercard-like-v1`.
+6. ARS rows are converted into existing parsed transaction candidates.
+7. USD/non-ARS rows and malformed transaction-like candidates remain visible as invalid or unprocessable rows.
+8. The existing categorization and report generator calculate totals, validation, review items, invalid rows, excluded rows, and audit output.
+
+Boundary rules:
+
+- PdfPig is isolated to Infrastructure.
+- QuestPDF is isolated to `backend/tools/ExpenseFlow.SyntheticPdfGenerator/` for synthetic fixture generation.
+- Application and Domain do not reference PdfPig, QuestPDF, OCR, LLM, database, or API infrastructure.
+- Extracted statement totals are metadata/evidence only and are not trusted validation input.
+- Supported PDF fixtures are synthetic only; real/private PDFs must not be committed.
 
 ## Why This Shape
 
@@ -88,7 +115,7 @@ The test suite is split by risk:
 - Integration tests cover CSV fixtures, parser behavior, application-level report generation, API request/response behavior, and release-gate checks.
 - Public synthetic fixtures in `backend/testdata/` prove the main workflow, happy path, invalid-row behavior, and mismatch behavior.
 
-The release gate requires:
+The CSV release gate requires:
 
 - restore/build/test success
 - full source row accounting
@@ -97,7 +124,17 @@ The release gate requires:
 - visible review items
 - visible excluded rows
 - synthetic fixture safety
-- no AI, database, authentication, frontend, Docker, cloud, PDF, or Excel dependency
+- no AI, database, authentication, frontend, Docker, cloud, or Excel dependency
+
+The PDF phase release gate additionally requires:
+
+- both synthetic PDF variants process through `POST /api/expense-reports/process-pdf`
+- Mastercard-like multi-page extraction remains covered
+- no extracted or normalized PDF row is silently dropped
+- non-ARS rows remain visible and are not counted in ARS totals
+- public PDF fixtures remain synthetic
+- PdfPig and QuestPDF stay within their accepted boundaries
+- OCR, LLM, arbitrary PDF support, persistence, auth, frontend, Docker, cloud, and external APIs remain out of scope
 
 ## MVP vs Future Architecture
 
@@ -118,5 +155,7 @@ Future:
 - richer rule management
 - export adapters
 - Excel parser behind the parser abstraction
+- additional PDF variants only after separate scope and fixture decisions
+- OCR/LLM assistance only after separate decisions
 - AI suggestions for review-required rows
 - authentication and multi-user support after product value is proven

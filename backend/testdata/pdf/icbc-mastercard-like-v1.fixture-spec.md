@@ -2,14 +2,14 @@
 
 ## Purpose
 
-This spec defines the synthetic statement data contract for the future public Mastercard-like PDF fixture. It is a fixture specification only; PDF-2.1 does not create an actual PDF binary or implement PDF parsing.
+This spec defines the synthetic statement data contract for the public Mastercard-like PDF fixture. It is implemented by the generated multi-page text-selectable PDF `icbc-mastercard-like-v1.pdf`.
 
-The CSV file `icbc-mastercard-like-v1.expected-normalized-rows.csv` is the source of truth for expected extraction results. A future generated PDF should visually contain the rows described here, and future extraction tests should compare extracted rows against that CSV.
+The CSV file `icbc-mastercard-like-v1.expected-normalized-rows.csv` is the source of truth for expected extraction results. The generated PDF visually contains the rows described here, and extraction/normalization tests compare extracted rows against that CSV.
 
 ## Fixture Identity
 
 - Variant id: `icbc-mastercard-like-v1`
-- Future source name: `icbc-mastercard-like-v1.synthetic.pdf`
+- Source name used in tests/API examples: `icbc-mastercard-like-v1.synthetic.pdf`
 - Source type: synthetic text-selectable credit card statement
 - Page count: multi-page fixture required for PDF phase completion
 - Data policy: synthetic public data only
@@ -30,7 +30,7 @@ No real names, card/account numbers, addresses, statement numbers, tax IDs, emai
 
 ## Conceptual Structure
 
-The future PDF should include `RESUMEN CONSOLIDADO` before transaction details. Summary rows in `RESUMEN CONSOLIDADO` are not normalized transactions.
+The generated PDF includes `RESUMEN CONSOLIDADO` before transaction details. Summary rows in `RESUMEN CONSOLIDADO` are not normalized transactions.
 
 Transaction detail starts at:
 
@@ -62,7 +62,7 @@ Lines after `TOTAL TITULAR` are summary/legal/informational content and must not
 
 ## Date, Amount, And Installment Rules
 
-- Source date format in the future PDF: `dd-MMM-yy` with Spanish month abbreviations such as `03-FEB-35`.
+- Source date format in the generated PDF: `dd-MMM-yy` with Spanish month abbreviations such as `03-FEB-35`.
 - Expected normalized date format in CSV expectations: `yyyy-MM-dd`.
 - Positive pesos values represent ordinary spending or fees.
 - Negative source values represent refund/payment/credit-like rows and must remain visible.
@@ -73,7 +73,7 @@ Lines after `TOTAL TITULAR` are summary/legal/informational content and must not
 
 ## Synthetic Rows To Include
 
-The future PDF should visually contain these invented rows in extraction order. Rows 1 through 4 are on page 1, and rows 5 through 10 are on page 2.
+The generated PDF visually contains these invented rows in extraction order. Rows 1 through 4 are on page 1, and rows 5 through 10 are on page 2.
 
 | Page | Subsection | Source date | Detail | NRO CUPON | Pesos | Dolares | Expected purpose |
 | ---: | --- | --- | --- | --- | ---: | ---: | --- |
@@ -88,7 +88,7 @@ The future PDF should visually contain these invented rows in extraction order. 
 | 2 | `Compras del Mes` | `20-FEB-35` | `SERVICIO GLOBAL DEMO` | `SMC-8109` | | `18.25` | optional foreign-currency evidence row |
 | 2 | `Compras del Mes` | empty | `LINEA INCOMPLETA TEST` | `SMC-8110` | empty | | malformed transaction-like candidate |
 
-The future PDF should also contain at least one `RESUMEN CONSOLIDADO` amount-like line before `DETALLE DEL MES` and one `TOTAL TITULAR` line after the active transaction section. Neither line may appear in the expected normalized rows.
+The generated PDF also contains at least one `RESUMEN CONSOLIDADO` amount-like line before `DETALLE DEL MES` and one `TOTAL TITULAR` line after the active transaction section. Neither line appears in the expected normalized rows.
 
 ## Cases Covered
 
@@ -112,10 +112,9 @@ This fixture is fully synthetic. It imitates only structural patterns of the tar
 
 ## Non-Goals
 
-- No actual PDF binary in PDF-2.1.
-- No PDF parsing implementation.
-- No PdfPig or QuestPDF dependency.
 - No OCR fixture.
 - No LLM fixture.
 - No category expectations.
 - No processed total or expected-total validation expectations.
+- No arbitrary bank/card PDF support.
+- No trusted statement-total extraction.

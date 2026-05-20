@@ -1,17 +1,23 @@
 # ExpenseFlow
 
-ExpenseFlow is a portfolio-grade ASP.NET Core backend that turns messy CSV expense exports into categorized, validated, auditable reports.
+ExpenseFlow is a portfolio-grade ASP.NET Core backend that turns messy expense files into categorized, validated, auditable reports.
 
 It is intentionally not a generic CRUD app and not a ChatGPT wrapper. The MVP demonstrates deterministic financial data processing first: parsing, validation, categorization rules, review visibility, totals, expected-total validation, structured API responses, and integration tests.
 
 ## What It Does
 
-ExpenseFlow accepts raw CSV text and an optional expected total, then returns a structured expense report.
+ExpenseFlow accepts raw CSV text or one of the supported synthetic PDF statement fixtures plus an optional expected total, then returns a structured expense report.
 
-The deterministic workflow is:
+The CSV workflow is:
 
 ```text
 CSV input -> row validation -> deterministic categorization -> review/exclusion detection -> totals -> report -> API response
+```
+
+The implemented PDF workflow is:
+
+```text
+synthetic PDF fixture -> PdfPig extraction -> PDF row normalization -> existing deterministic pipeline -> PDF API response
 ```
 
 The current MVP:
@@ -41,22 +47,30 @@ For portfolio purposes, the project is designed to show backend judgment:
 - fixture-backed integration tests
 - responsible future AI positioning
 
-## Current MVP Status
+## Current Status
 
-Milestone 9 is complete. The deterministic MVP is implemented and documented for portfolio review.
+The deterministic CSV MVP is complete and documented for portfolio review. The PDF ingestion phase is also implemented for the committed synthetic ICBC-like fixtures.
 
 Implemented:
 
 - .NET solution and ASP.NET Core Minimal API
 - CSV parser using CsvHelper behind an application abstraction
+- PDF extraction using PdfPig behind an Infrastructure adapter
+- deterministic PDF row normalization into the existing processing pipeline
 - deterministic categorization and review detection
 - totals, category summaries, expected-total validation, and MVP report generation
 - `POST /api/expense-reports/process`
+- `POST /api/expense-reports/process-pdf`
 - unit and integration tests
 - fixture-backed release gate
 - portfolio docs, demo script, API examples, interview pitch, and architecture summary
 
-Next step: future feature work should start from the roadmap, not by expanding the MVP boundary casually. The planned PDF statement ingestion phase is scoped in [docs/pdf-ingestion-plan.md](docs/pdf-ingestion-plan.md). A first deterministic PDF endpoint is now available for the committed synthetic text-selectable ICBC-like fixtures.
+Supported PDF variants:
+
+- `icbc-visa-like-v1`
+- `icbc-mastercard-like-v1`
+
+Future feature work should start from the roadmap, not by expanding the release boundary casually. The PDF statement ingestion phase scope and deferred items are documented in [docs/pdf-ingestion-plan.md](docs/pdf-ingestion-plan.md).
 
 ## Tech Stack
 
@@ -64,10 +78,12 @@ Next step: future feature work should start from the roadmap, not by expanding t
 - ASP.NET Core Minimal APIs
 - C#
 - CsvHelper for CSV parsing
+- PdfPig for text-selectable PDF extraction, isolated to Infrastructure
+- QuestPDF for synthetic PDF fixture generation only
 - xUnit
 - Microsoft.AspNetCore.Mvc.Testing for API integration tests
 
-No database, authentication, frontend, Docker, cloud infrastructure, PDF parsing, Excel parsing, background jobs, or AI provider is required for the MVP.
+No database, authentication, frontend, Docker, cloud infrastructure, Excel parsing, background jobs, OCR, LLM, external API, or AI provider is required for the implemented release.
 
 ## Architecture Overview
 
@@ -84,7 +100,7 @@ ExpenseFlow.Domain
   transaction statuses, categories, report concepts, audit concepts, validation concepts
 
 ExpenseFlow.Infrastructure
-  CSV parser implementation and replaceable external adapters
+  CSV parser implementation, PdfPig PDF extractor, and replaceable external adapters
 ```
 
 The first endpoint stays thin: it validates request shape, calls the application processing service, and maps the report to API DTOs. Parsing, categorization, totals, report generation, and audit decisions live outside the API handler.
@@ -122,6 +138,12 @@ See [docs/architecture-summary.md](docs/architecture-summary.md) for the public-
       demo-happy-path.csv
       demo-invalid-rows.csv
       demo-total-mismatch.csv
+      pdf/
+        icbc-visa-like-v1.pdf
+        icbc-mastercard-like-v1.pdf
+        *.expected-normalized-rows.csv
+    tools/
+      ExpenseFlow.SyntheticPdfGenerator/
 ```
 
 ## Run Locally
@@ -205,7 +227,17 @@ Content-Type: application/json
 
 The PDF endpoint accepts `sourceName`, optional `expectedTotal`, `pdfBase64`, and optional `statementShapeHint`. It currently supports only the synthetic text-selectable ICBC-like fixtures in `backend/testdata/pdf/`.
 
-It does not support OCR, LLM extraction, arbitrary bank/card PDFs, exchange-rate conversion, persistence, authentication, frontend workflows, Docker, or cloud deployment.
+Supported `statementShapeHint` values:
+
+- `icbc-visa-like-v1`
+- `icbc-mastercard-like-v1`
+
+Limitations:
+
+- supports only the committed synthetic/tested text-selectable ICBC-like variants
+- no OCR, LLM extraction, arbitrary bank/card PDFs, exchange-rate conversion, persistence, authentication, frontend workflows, Docker, or cloud deployment
+- `expectedTotal` remains caller-provided; extracted statement totals are not trusted validation input
+- non-ARS rows remain visible as unsupported rows and are not counted in ARS totals
 
 ## Example Response Summary
 
@@ -247,9 +279,11 @@ The committed fixtures in `backend/testdata/` are synthetic and public-safe:
 
 No real financial data should be committed. Keep any private local files outside version control.
 
+Real PDFs must stay local/private and must not be committed. Public PDF fixtures in `backend/testdata/pdf/` are synthetic only.
+
 ## Release Gate
 
-Before treating the deterministic MVP as release-ready:
+Before treating the CSV MVP as release-ready:
 
 - `dotnet restore` succeeds from `backend/`
 - `dotnet build` succeeds from `backend/`
@@ -259,23 +293,39 @@ Before treating the deterministic MVP as release-ready:
 - no source row is silently dropped
 - invalid, review-required, excluded, duplicate-looking, and installment rows remain visible
 - expected total validation covers match, mismatch, and missing expected total behavior
-- the MVP has no AI, database, authentication, frontend, Docker, cloud, PDF, or Excel dependency
+- the CSV MVP has no AI, database, authentication, frontend, Docker, cloud, or Excel dependency
+
+PDF phase release gate:
+
+- `dotnet restore`, `dotnet build`, and `dotnet test` succeed from `backend/`
+- synthetic Visa-like PDF fixture works through `POST /api/expense-reports/process-pdf`
+- synthetic Mastercard-like PDF fixture works through `POST /api/expense-reports/process-pdf`
+- public PDF fixtures remain synthetic and no real/private PDFs are committed
+- QuestPDF remains fixture-generation only
+- PdfPig remains Infrastructure-only
+- CSV endpoint regression tests still pass
+- no OCR, LLM, database, auth, frontend, Docker, cloud, or external API dependency is introduced
+- no extracted or normalized PDF row is silently dropped
+- non-ARS rows remain visible and are not counted in ARS totals
 
 ## Intentionally Out Of Scope
 
-The MVP deliberately excludes:
+The implemented release deliberately excludes:
 
 - AI integration
 - database persistence
 - authentication and user accounts
 - frontend/dashboard
 - Docker or cloud deployment
-- PDF parsing
+- arbitrary bank/card PDF parsing
+- OCR
 - Excel parsing
 - manual correction workflow
 - background jobs
 - generic CRUD expense management
 - financial advice, budgeting, forecasting, or alerts
+- trusted statement-total extraction
+- exchange-rate conversion
 
 Future AI can assist review-required rows later, but it must not calculate totals, validate totals, override deterministic rules, or silently finalize ambiguous classifications.
 
@@ -288,7 +338,8 @@ Possible future work:
 - richer rule management
 - export formats for generated reports
 - Excel input parser behind the parser boundary
-- deterministic PDF statement ingestion from the scoped synthetic ICBC-like variants
+- additional deterministic PDF variants after separate scope and fixture decisions
+- OCR only after a separate decision
 - responsible AI suggestions for already review-required transactions
 - frontend or dashboard once backend behavior is stable
 - authentication and multi-user support after product value is proven
@@ -298,7 +349,7 @@ Possible future work:
 
 The strongest interview story is:
 
-ExpenseFlow demonstrates backend engineering through a trustworthy file-to-report workflow. It parses a synthetic CSV, validates rows, applies deterministic rules, surfaces ambiguity instead of guessing, calculates totals without AI, validates against an expected total, and returns an auditable JSON report. The code is split across API, Application, Domain, and Infrastructure projects, with unit and integration tests guarding the release gate.
+ExpenseFlow demonstrates backend engineering through a trustworthy file-to-report workflow. It parses a synthetic CSV or supported synthetic text-selectable PDF fixture, validates rows, applies deterministic rules, surfaces ambiguity instead of guessing, calculates totals without AI, validates against a caller-provided expected total, and returns an auditable JSON report. The code is split across API, Application, Domain, and Infrastructure projects, with unit and integration tests guarding the release gate.
 
 Useful docs for review:
 
