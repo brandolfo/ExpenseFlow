@@ -213,3 +213,10 @@
 - Alternatives considered: Keep the phase open until arbitrary bank/card PDFs work, add OCR or LLM extraction, trust extracted statement totals, add exchange-rate conversion, add persistence/auth/frontend/Docker, or rely only on documentation instead of executable release-gate tests.
 - Consequences: The repository can present PDF ingestion as implemented for the scoped synthetic fixtures while staying honest about limitations. PdfPig remains Infrastructure-only, QuestPDF remains fixture-generation only, CSV behavior remains protected, non-ARS rows remain visible and excluded from ARS totals, and future OCR/LLM/arbitrary-PDF/private-data work still requires separate decisions.
 - Status: Accepted.
+
+### 2026-05-20 - Add GitHub Actions backend CI release gate
+- Decision: ExpenseFlow will use GitHub Actions as a public backend CI release gate that runs `dotnet restore`, `dotnet build`, and `dotnet test` from `backend/` for pull requests, pushes to `main`, and manual dispatches.
+- Context: The implemented CSV MVP and scoped synthetic PDF ingestion are already guarded locally by restore/build/test and fixture-backed tests. A public repository CI badge and workflow make that gate visible and repeatable for portfolio review without changing product behavior.
+- Alternatives considered: Keep the release gate local only, add a deployment pipeline, add Docker/cloud infrastructure, add coverage or scanning services, publish packages, or introduce branch protection immediately.
+- Consequences: Pull requests and `main` pushes can validate the existing backend solution on a standard GitHub-hosted Linux runner. The workflow uses minimal read-only repository permissions and does not require secrets, paid services, deployment, Docker/cloud infrastructure, artifact upload, coverage services, package publishing, or branch protection.
+- Status: Accepted.

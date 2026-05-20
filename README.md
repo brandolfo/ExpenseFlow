@@ -1,5 +1,7 @@
 # ExpenseFlow
 
+[![Backend CI](https://github.com/brandolfo/ExpenseFlow/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/brandolfo/ExpenseFlow/actions/workflows/backend-ci.yml)
+
 ExpenseFlow is a portfolio-grade ASP.NET Core backend that turns messy expense files into categorized, validated, auditable reports.
 
 It is intentionally not a generic CRUD app and not a ChatGPT wrapper. The MVP demonstrates deterministic financial data processing first: parsing, validation, categorization rules, review visibility, totals, expected-total validation, structured API responses, and integration tests.
