@@ -12,7 +12,7 @@ CsvHelper is isolated in Infrastructure behind `ITransactionFileParser`. The par
 
 The report generator calculates processed totals and trusted category totals deterministically. Invalid rows, refund-like rows, and transfer-like rows are excluded from totals. Review-required rows without trusted categories do not inflate category totals. Expected total validation supports match, mismatch, and missing expected total. The API returns metadata, counts, totals, validation, category summary, transaction details, review items, invalid rows, excluded rows, and audit summary.
 
-The release gate is covered by unit and integration tests using committed synthetic fixtures. The important proof is that no source row is silently dropped and no AI is used for financial correctness.
+The release gate is covered by unit and integration tests using committed synthetic fixtures, and GitHub Actions Backend CI runs restore/build/test for pull requests and `main` updates. The important proof is that no source row is silently dropped and no AI is used for financial correctness.
 
 ## PDF Phase Talking Points
 
@@ -43,6 +43,7 @@ The release gate is covered by unit and integration tests using committed synthe
 - audit-friendly API response mapping
 - xUnit unit tests and API integration tests
 - fixture-backed release gate
+- GitHub Actions restore/build/test CI
 - product-driven scope control
 
 ## Architecture Decisions Worth Discussing

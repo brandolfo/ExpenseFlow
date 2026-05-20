@@ -1,5 +1,7 @@
 # PDF Ingestion Plan
 
+> Status: the scoped synthetic PDF ingestion phase is complete for `icbc-visa-like-v1` and `icbc-mastercard-like-v1`. This document remains the phase contract and historical implementation plan; see `README.md` and `docs/architecture-summary.md` for the current implemented project status.
+
 ## 1. Purpose
 
 ExpenseFlow MVP v0.1 is complete as a deterministic ASP.NET Core backend for CSV expense processing. The PDF phase expands supported source inputs while preserving the existing product principle: turn messy financial expense files into structured, categorized, validated, auditable reports.

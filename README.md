@@ -65,6 +65,7 @@ Implemented:
 - `POST /api/expense-reports/process-pdf`
 - unit and integration tests
 - fixture-backed release gate
+- GitHub Actions Backend CI for public restore/build/test verification
 - portfolio docs, demo script, API examples, interview pitch, and architecture summary
 
 Supported PDF variants:
@@ -285,6 +286,8 @@ Real PDFs must stay local/private and must not be committed. Public PDF fixtures
 
 ## Release Gate
 
+GitHub Actions Backend CI runs the restore/build/test gate from `backend/` on pull requests, pushes to `main`, and manual dispatches.
+
 Before treating the CSV MVP as release-ready:
 
 - `dotnet restore` succeeds from `backend/`
@@ -345,7 +348,7 @@ Possible future work:
 - responsible AI suggestions for already review-required transactions
 - frontend or dashboard once backend behavior is stable
 - authentication and multi-user support after product value is proven
-- CI/CD and deployment hardening
+- deployment and observability hardening after separate scope and decisions
 
 ## Portfolio And Interview Positioning
 

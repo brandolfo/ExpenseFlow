@@ -1,19 +1,33 @@
 # Roadmap
 
-## Phase 0 - Product discovery
-Agent definitions, product brief, assumptions, target user, MVP definition.
+> Current status: the deterministic CSV MVP, scoped synthetic PDF ingestion for `icbc-visa-like-v1` and `icbc-mastercard-like-v1`, and GitHub Actions Backend CI are complete. Future work below is directional only and requires separate scope and decision documentation before implementation.
 
-## Phase 1 - Core workflow without AI
-Process a simple transaction file, categorize known patterns with deterministic rules, validate totals, return a summary.
+## Implemented
 
-## Phase 2 - Review and correction
-Allow manual correction of uncertain categories and preserve the correction history.
+- Deterministic CSV file-to-report backend workflow.
+- Scoped synthetic text-selectable PDF ingestion for the two accepted ICBC-like variants.
+- Fixture-backed unit and integration test release gate.
+- GitHub Actions Backend CI running restore, build, and test from `backend/`.
+- Portfolio docs, API examples, demo script, interview pitch, architecture summary, and synthetic-data guardrails.
 
-## Phase 3 - AI assistance
-Use AI only for ambiguous classifications, explanations, and summaries.
+## Future Candidates
 
-## Phase 4 - Reporting
-Generate structured exports and portfolio-ready demo outputs.
+- Manual correction workflow with correction history.
+- Persisted report history after product value is proven.
+- Richer deterministic rule management.
+- Export formats for generated reports.
+- Excel input parser behind the parser boundary.
+- Additional deterministic PDF variants after separate scope, synthetic fixtures, and tests.
+- OCR only after a separate decision.
+- Responsible AI suggestions only for already review-required rows.
+- Frontend or dashboard once backend behavior is stable.
+- Authentication and multi-user support after product value is proven.
+- Deployment and observability hardening after separate scope and decisions.
 
-## Phase 5 - Professionalization
-Testing, documentation, deployment, observability, demo script, portfolio positioning.
+## Still Out Of Scope
+
+- Arbitrary bank/card PDF support.
+- Real/private statement processing in public artifacts.
+- AI for totals, deterministic validation, or final financial decisions.
+- Runtime multi-agent architecture.
+- Docker/cloud deployment without a future accepted decision.

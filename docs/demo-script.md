@@ -21,6 +21,8 @@ dotnet build
 dotnet test
 ```
 
+The same restore/build/test release gate is also run by GitHub Actions Backend CI for pull requests and `main` updates.
+
 Run the API:
 
 ```powershell
@@ -121,7 +123,7 @@ Future AI can help with review-required rows, summaries, or rule recommendations
 ## Two-Minute Demo Flow
 
 1. Show the README one-liner and say: "This is a backend file-to-report workflow."
-2. Run or show `dotnet test` passing.
+2. Run or show `dotnet test` passing, and point out the Backend CI badge if the repo is open on GitHub.
 3. Start the API with `dotnet run --project src/ExpenseFlow.Api`.
 4. Send the `demo-main.csv` request.
 5. Point at counts: 22 source rows, 19 valid, 6 review, 3 invalid.
