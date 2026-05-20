@@ -1,5 +1,7 @@
 # Build Plan
 
+> Historical planning artifact: this document defined the original CSV MVP implementation sequence before the MVP was completed. See `README.md` and `docs/architecture-summary.md` for the current implemented state, including the completed scoped synthetic PDF ingestion phase.
+
 ## 1. Purpose
 This document turns the accepted backend architecture into an implementation sequence for the first ASP.NET Core / .NET vertical slice of ExpenseFlow.
 

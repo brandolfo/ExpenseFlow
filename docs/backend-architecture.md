@@ -1,5 +1,7 @@
 # Backend Architecture
 
+> Historical planning artifact: this document defined the original CSV MVP backend architecture before implementation. See `README.md` and `docs/architecture-summary.md` for the current implemented state, including the completed scoped synthetic PDF ingestion phase.
+
 ## 1. Architecture goals
 ExpenseFlow's MVP backend architecture should support the first vertical slice from `docs/demo-story.md`: process the 22-row synthetic mixed-behavior CSV-shaped dataset with expected total `258248.00` and produce a categorized, validated, auditable expense report.
 

@@ -41,12 +41,13 @@ Available role agents:
 
 ## PDF statement phase rules
 - MVP v0.1 is complete as a deterministic CSV expense-processing backend.
-- The next intended direction is PDF statement ingestion, but PDF parsing must be scoped before implementation.
+- Scoped synthetic PDF ingestion is complete for `icbc-visa-like-v1` and `icbc-mastercard-like-v1`.
+- Future feature work must start from explicit scope and decision documentation.
 - Treat PDF statements as untrusted and sensitive input.
 - Use only synthetic or carefully redacted statement samples in committed files.
 - Preserve document traceability: page number, extracted text/span evidence, source filename, and extraction warnings where available.
 - PDF extraction should normalize transactions into the existing deterministic processing pipeline instead of creating a separate financial logic path.
-- Do not add OCR, external APIs, LLM integration, persistence, auth, frontend, Docker/cloud, or manual correction workflow unless explicitly scoped and documented.
+- Arbitrary PDFs, OCR, external APIs, LLM integration, persistence, auth, frontend, Docker/cloud, real/private statement processing, or manual correction workflow remain future work unless explicitly scoped and documented.
 
 ## AI usage rules
 - Do not use AI to calculate financial totals.
@@ -97,5 +98,5 @@ Every major decision should be recorded in /docs/decisions.md with:
 - Consequences
 
 ## Current phase
-Current phase: MVP v0.1 complete. Next phase can begin with PDF statement ingestion scope, extraction design, privacy rules, and test planning.
-Do not implement PDF support, OCR, external APIs, LLM integration, persistence, auth, frontend, Docker/cloud, or new product behavior until explicitly scoped and requested.
+Current phase: deterministic CSV MVP complete, and scoped synthetic PDF ingestion complete for `icbc-visa-like-v1` and `icbc-mastercard-like-v1`.
+Future feature work must start from explicit scope and decision docs. Do not implement arbitrary PDF support, OCR, external APIs, LLM integration, persistence, auth, frontend, Docker/cloud, real/private statement processing, or new product behavior until explicitly scoped and requested.

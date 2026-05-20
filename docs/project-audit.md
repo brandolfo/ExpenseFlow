@@ -1,5 +1,7 @@
 # Project Audit
 
+> Historical planning audit: this document was written during the pre-architecture/pre-MVP phase. Some findings are intentionally outdated because the deterministic CSV MVP and scoped synthetic PDF ingestion phase have since been completed. Current project status lives in `README.md`; accepted decisions live in `docs/decisions.md`; the current architecture summary lives in `docs/architecture-summary.md`; and current PDF scope lives in `docs/pdf-ingestion-plan.md`.
+
 ## Executive summary
 ExpenseFlow is on the right track. The project has a clear product thesis, strong safety constraints, and a useful backend-centered MVP direction: transform messy structured transaction exports into categorized, validated, auditable reports.
 
