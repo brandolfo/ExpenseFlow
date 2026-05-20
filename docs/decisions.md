@@ -171,3 +171,10 @@
 - Alternatives considered: Generate actual PDFs immediately with QuestPDF, commit only prose without expected rows, use anonymized real statements, wait until extraction code exists to define fixtures, or include categorization/reporting expectations in the PDF fixture files.
 - Consequences: Future PDF extraction work has concrete synthetic targets without adding libraries, parsing code, endpoints, OCR, LLM behavior, or private data risk. The expected rows remain extraction/normalization fixtures only and do not define categories, processed totals, or expected-total validation.
 - Status: Accepted.
+
+### 2026-05-20 - Generate synthetic PDF fixtures with isolated tooling
+- Decision: PDF-2.2 generates committed, text-selectable synthetic PDF fixtures for `icbc-visa-like-v1` and `icbc-mastercard-like-v1` using a dedicated QuestPDF-based tool project under `backend/tools/ExpenseFlow.SyntheticPdfGenerator/`. QuestPDF is allowed only in that generator project and remains out of production API, Application, Domain, and Infrastructure projects. Production extraction remains independent and will use the later accepted extraction library candidate.
+- Context: The expected normalized-row CSVs now define the source of truth for fixture extraction expectations, and future PDF-3/PDF-4 work needs actual public PDFs that visually contain those synthetic rows. The project still must avoid parser implementation, PdfPig, OCR, LLM integration, endpoints, private data, and CSV behavior changes in this milestone.
+- Alternatives considered: Hand-create PDFs outside the repository, add QuestPDF to production Infrastructure, generate PDFs only during tests without committing them, add PdfPig now to validate text extraction, or continue with specs only.
+- Consequences: Future extraction tests can target committed public PDFs while production code remains free of fixture-generation dependencies. The generator can be rerun when expected rows change, but it must never read private statements or use private data.
+- Status: Accepted.

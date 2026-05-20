@@ -38,10 +38,10 @@ public sealed class PdfArchitectureBoundaryTests
     }
 
     [Fact]
-    public void BackendProjectsDoNotReferencePdfLibrariesOrAiProviders()
+    public void ProductionProjectsDoNotReferencePdfLibrariesOrAiProviders()
     {
         var backendDirectory = GetBackendDirectory();
-        var projectFiles = Directory.EnumerateFiles(backendDirectory, "*.csproj", SearchOption.AllDirectories);
+        var projectFiles = Directory.EnumerateFiles(Path.Combine(backendDirectory, "src"), "*.csproj", SearchOption.AllDirectories);
         var forbiddenTerms = new[] { "PdfPig", "QuestPDF", "OpenAI", "OpenAi", "Tesseract", "DocumentIntelligence" };
 
         foreach (var projectFile in projectFiles)
@@ -52,6 +52,41 @@ public sealed class PdfArchitectureBoundaryTests
             {
                 Assert.DoesNotContain(term, text, StringComparison.OrdinalIgnoreCase);
             }
+        }
+    }
+
+    [Fact]
+    public void SyntheticPdfGeneratorIsOnlyProjectAllowedToReferenceQuestPdf()
+    {
+        var backendDirectory = GetBackendDirectory();
+        var projectFiles = Directory.EnumerateFiles(backendDirectory, "*.csproj", SearchOption.AllDirectories);
+
+        var questPdfProjects = projectFiles
+            .Where(projectFile => File.ReadAllText(projectFile).Contains("QuestPDF", StringComparison.OrdinalIgnoreCase))
+            .Select(projectFile => Path.GetRelativePath(backendDirectory, projectFile).Replace('\\', '/'))
+            .ToArray();
+
+        Assert.Equal(["tools/ExpenseFlow.SyntheticPdfGenerator/ExpenseFlow.SyntheticPdfGenerator.csproj"], questPdfProjects);
+    }
+
+    [Fact]
+    public void SyntheticPdfFixtureFilesAndExpectedRowsExistUnderPdfTestdata()
+    {
+        var pdfFixtureDirectory = Path.Combine(GetBackendDirectory(), "testdata", "pdf");
+        var requiredFiles = new[]
+        {
+            "icbc-visa-like-v1.pdf",
+            "icbc-mastercard-like-v1.pdf",
+            "icbc-visa-like-v1.expected-normalized-rows.csv",
+            "icbc-mastercard-like-v1.expected-normalized-rows.csv"
+        };
+
+        foreach (var requiredFile in requiredFiles)
+        {
+            var path = Path.Combine(pdfFixtureDirectory, requiredFile);
+
+            Assert.True(File.Exists(path), $"Missing PDF fixture file: {path}");
+            Assert.StartsWith(pdfFixtureDirectory, Path.GetFullPath(path), StringComparison.OrdinalIgnoreCase);
         }
     }
 

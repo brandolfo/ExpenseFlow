@@ -4,7 +4,9 @@ This folder is reserved for public synthetic PDF fixture assets for the PDF stat
 
 ## Current Status
 
-PDF-2 uses fixture specifications and expected normalized-row CSV files only. Actual generated PDF binaries are deferred to a later fixture-generation milestone. QuestPDF is not added yet because PDF-2 can define the extraction target without introducing a generation dependency.
+PDF-2.2 adds generated, text-selectable synthetic PDF binaries for the two accepted statement variants. The PDFs are fixture assets only; no PDF parser, extractor, OCR, LLM integration, or endpoint is implemented here.
+
+QuestPDF is used only by the dedicated generator tool under `backend/tools/ExpenseFlow.SyntheticPdfGenerator/`. It is not a production extraction dependency.
 
 ## Variant IDs
 
@@ -17,10 +19,14 @@ The first public synthetic fixture variants are:
 
 - `icbc-visa-like-v1.fixture-spec.md`: describes the future single-page synthetic Visa-like PDF layout.
 - `icbc-visa-like-v1.expected-normalized-rows.csv`: expected extraction and normalization rows for the Visa-like variant.
+- `icbc-visa-like-v1.pdf`: generated text-selectable synthetic Visa-like fixture.
 - `icbc-mastercard-like-v1.fixture-spec.md`: describes the future multi-page synthetic Mastercard-like PDF layout.
 - `icbc-mastercard-like-v1.expected-normalized-rows.csv`: expected extraction and normalization rows for the Mastercard-like variant.
+- `icbc-mastercard-like-v1.pdf`: generated text-selectable synthetic Mastercard-like fixture.
 
-The CSV files describe extraction/normalization expectations only. They do not define final categories, processed totals, expected-total validation, or report output.
+The CSV files are the source of truth for expected extraction and normalization results. The generated PDFs visually contain those rows so future extraction tests can compare extracted output against the expected normalized-row CSVs.
+
+The CSV files and PDFs describe extraction/normalization expectations only. They do not define final categories, processed totals, expected-total validation, or report output.
 
 ## Synthetic-Only Rule
 
@@ -44,6 +50,14 @@ Fixtures must not contain:
 
 ## Future PDF Generation
 
-When actual PDF binaries are generated later, they should be small, text-selectable, fully synthetic, and aligned with these specs and expected rows. Generated PDFs remain allowed under this folder unless they match private filename patterns from `.gitignore`.
+Regenerate the public synthetic PDFs from `backend/` with:
+
+```powershell
+dotnet run --project tools/ExpenseFlow.SyntheticPdfGenerator
+```
+
+The generator reads the expected normalized-row CSVs and writes the PDF fixture files listed above.
+
+Generated PDFs are safe to commit only because they are fully synthetic. Real PDFs remain forbidden here, including anonymized real statements, screenshots, extracted text, and private statement metadata.
 
 These fixture assets will support PDF-3/PDF-4 tests for statement-shape detection, active-section markers, row extraction order, page traceability, header/footer exclusion, sign handling, malformed candidate visibility, and no silent row loss.
