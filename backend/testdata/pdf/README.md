@@ -25,10 +25,10 @@ The first public synthetic fixture variants are:
 
 ## Files
 
-- `icbc-visa-like-v1.fixture-spec.md`: describes the future single-page synthetic Visa-like PDF layout.
+- `icbc-visa-like-v1.fixture-spec.md`: describes the generated single-page synthetic Visa-like PDF layout.
 - `icbc-visa-like-v1.expected-normalized-rows.csv`: expected extraction and normalization rows for the Visa-like variant.
 - `icbc-visa-like-v1.pdf`: generated text-selectable synthetic Visa-like fixture.
-- `icbc-mastercard-like-v1.fixture-spec.md`: describes the future multi-page synthetic Mastercard-like PDF layout.
+- `icbc-mastercard-like-v1.fixture-spec.md`: describes the generated multi-page synthetic Mastercard-like PDF layout.
 - `icbc-mastercard-like-v1.expected-normalized-rows.csv`: expected extraction and normalization rows for the Mastercard-like variant.
 - `icbc-mastercard-like-v1.pdf`: generated text-selectable synthetic Mastercard-like fixture.
 
