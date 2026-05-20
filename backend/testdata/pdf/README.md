@@ -4,7 +4,7 @@ This folder is reserved for public synthetic PDF fixture assets for the PDF stat
 
 ## Current Status
 
-PDF-2.2 adds generated, text-selectable synthetic PDF binaries for the two accepted statement variants. The PDFs are fixture assets only; no PDF parser, extractor, OCR, LLM integration, or endpoint is implemented here.
+PDF-2.2 adds generated, text-selectable synthetic PDF binaries for the two accepted statement variants. The PDFs are fixture assets only; no PDF endpoint, OCR, LLM integration, private-data workflow, or report pipeline integration is implemented here.
 
 QuestPDF is used only by the dedicated generator tool under `backend/tools/ExpenseFlow.SyntheticPdfGenerator/`. It is not a production extraction dependency.
 
